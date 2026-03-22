@@ -2,49 +2,101 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>SúperAhorro Panamá</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
-<link rel="manifest" href="manifest.json">`n</head>
-<body class="bg-slate-50 font-sans min-h-screen flex flex-col items-center justify-center p-6">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - ComprAhorro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f4f7f6; display: flex; align-items: center; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card-registro { border-radius: 25px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; padding: 30px; margin: auto; }
+        .btn-green { background-color: #28a745; color: white; border-radius: 50px; padding: 12px; font-weight: bold; width: 100%; border: none; transition: 0.3s; }
+        .btn-green:hover { background-color: #218838; transform: translateY(-2px); }
+        .form-control, .form-select { border-radius: 50px; padding: 12px 20px; border: 1px solid #ced4da; }
+        .logo-img { max-width: 80px; margin-bottom: 15px; }
+        .slogan-text { font-size: 0.9rem; color: #6c757d; margin-bottom: 25px; line-height: 1.4; }
+    </style>
+</head>
+<body>
 
-    <div class="max-w-xl w-full bg-white rounded-[40px] shadow-2xl p-12 text-center border border-gray-100">
-        <div class="w-32 h-32 bg-green-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg rotate-3">
-            <svg class="w-20 h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
+    <div class="container d-flex justify-content-center">
+        <div class="card card-registro bg-white text-center">
+            <img src="logo.png" alt="ComprAhorro" class="logo-img mx-auto">
+            
+            <h2 class="fw-bold mb-2">Crea tu cuenta ⚡</h2>
+            <p class="slogan-text">ComprAhorro: Tu app gratuita para comprar con precisión e inteligencia, ahorrando en tiempos difíciles.</p>
+            
+            <form id="registerForm">
+                <div class="mb-3 text-start">
+                    <input type="text" id="nombre" class="form-control" placeholder="Nombre Completo" required>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <input type="email" id="email" class="form-control" placeholder="Correo electrónico" required>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <select id="localidad" class="form-select" required>
+                        <option value="" disabled selected>Selecciona tu Localidad</option>
+                        <option value="panama-centro">Panamá Centro</option>
+                        <option value="san-miguelito">San Miguelito</option>
+                        <option value="chorrera">La Chorrera</option>
+                        <option value="otro">Otras Provincias</option>
+                    </select>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <input type="password" id="password" class="form-control" placeholder="Contraseña segura" required>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <input type="text" id="referido" class="form-control" placeholder="Código de referido (Opcional)">
+                </div>
+
+                <button type="submit" class="btn btn-green mt-2 shadow">Registrarme Gratis</button>
+                <div id="mensaje" class="mt-3 small"></div>
+            </form>
+            
+            <div class="mt-4">
+                <a href="index.html" class="text-decoration-none text-success">← Volver al inicio</a>
+            </div>
         </div>
-
-        <h1 class="text-5xl font-black text-slate-900 mb-2" style="font-family: 'Montserrat';">SúperAhorro</h1>
-        <p class="text-blue-600 font-bold mb-8 tracking-widest uppercase text-sm">Tu aliado inteligente en cada compra</p>
-
-        <div class="bg-green-100 text-green-700 font-black py-2 px-6 rounded-full inline-block mb-8 text-xs uppercase">
-            ¡REGISTRO 100% GRATIS!
-        </div>
-
-        <p class="text-slate-600 mb-10 leading-relaxed font-medium">
-            ¿Para qué sirve? Compara precios de distintos comercios en tiempo real y encuentra dónde está la verdadera oferta.
-        </p>
-
-        <div class="bg-blue-50 p-6 rounded-3xl mb-10 border-2 border-blue-100 italic text-blue-800 font-medium">
-            "Hijos, cada dólar que ahorramos aquí es un dólar más para el futuro. ¡Vamos a buscar las mejores ofertas!"
-        </div>
-
-        <button onclick="location.href='dashboard.html'" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-5 rounded-3xl text-2xl shadow-xl transition-all hover:scale-105 active:scale-95">
-            ¡Empezar a Ahorrar!
-        </button>
     </div>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('SúperAhorro: PWA Lista y Confiable!', reg))
-        .catch(err => console.log('Error al registrar PWA', err));
+    <script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const mensajeDiv = document.getElementById("mensaje");
+        mensajeDiv.innerHTML = "<span class='text-muted'>Procesando tu ahorro...</span>";
+        
+        const userData = {
+            nombre: document.getElementById('nombre').value,
+            email: document.getElementById('email').value,
+            localidad: document.getElementById('localidad').value,
+            password: document.getElementById('password').value,
+            referidoPor: document.getElementById('referido').value
+        };
+
+        try {
+            const response = await fetch('http://localhost:3000/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            });
+
+            if (response.ok) {
+                mensajeDiv.innerHTML = "<span class='text-success'>✅ ¡Bienvenido a ComprAhorro! Redirigiendo...</span>";
+                // Redirección al Dashboard tras 2 segundos de éxito
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+            } else {
+                mensajeDiv.innerHTML = "<span class='text-danger'>❌ Hubo un problema. El correo podría estar ya registrado.</span>";
+            }
+        } catch (error) {
+            console.error('Error en el registro:', error);
+            mensajeDiv.innerHTML = "<span class='text-danger'>❌ Error de conexión. ¿Está el servidor encendido?</span>";
+        }
     });
-  }
-</script>
+    </script>
 </body>
 </html>
-
 
