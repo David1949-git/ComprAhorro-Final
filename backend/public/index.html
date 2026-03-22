@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Inteligente - ComprAhorro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8faf9; font-family: sans-serif; }
+        .navbar { background-color: #28a745; color: white; padding: 1rem; }
+        .main-card { max-width: 800px; margin: 50px auto; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .btn-search { background-color: #ffd700; border: none; border-radius: 50px; padding: 15px 40px; font-weight: bold; cursor: pointer; }
+        .btn-search:hover { background-color: #ffc107; }
+        .search-input { border-radius: 50px; padding: 15px 25px; border: 2px solid #ddd; width: 70%; }
+        #loader { display: none; margin-top: 20px; color: #28a745; font-weight: bold; }
+        .product-card { background: white; border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container"><strong>⚡ ComprAhorro</strong></div>
+    </nav>
+
+    <div class="container text-center">
+        <div class="main-card">
+            <h1 class="fw-bold mb-4">¿Qué quieres ahorrar hoy? 🍚</h1>
+            <input type="text" id="searchInput" class="search-input" placeholder="Ej: Arroz, TV Sony...">
+            <button type="button" onclick="buscarInteligente()" class="btn-search">BUSCAR</button>
+            <div id="loader">Buscando precios en Panamá...</div>
+        </div>
+        <div id="resultados" class="mt-4"></div>
+    </div>
+
+    <script>
+        async function buscarInteligente() {
+            // PRIMERA PRUEBA: Si ves este mensaje, el botón funciona.
+            console.log("Botón presionado");
+            
+            const query = document.getElementById('searchInput').value;
+            const resDiv = document.getElementById('resultados');
+            const loader = document.getElementById('loader');
+
+            if (!query) {
+                alert("Escribe algo, Capi.");
+                return;
+            }
+
+            loader.style.display = 'block';
+            resDiv.innerHTML = "";
+
+            try {
+                const url = 'http://localhost:3000/products/search?q=' + encodeURIComponent(query);
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                loader.style.display = 'none';
+
+                if (!data || data.length === 0) {
+                    resDiv.innerHTML = "<p>No hay resultados. Revisa que el servidor esté encendido.</p>";
+                    return;
+                }
+
+                data.forEach(p => {
+                    resDiv.innerHTML += \
+                        <div class="product-card">
+                            <div class="text-start">
+                                <strong>\</strong><br>
+                                <small>\</small>
+                            </div>
+                            <div class="text-end">
+                                <span style="font-size: 1.5rem; color: #28a745;">$\</span><br>
+                                <button class="btn btn-sm btn-success rounded-pill" onclick="alert('Conectando...')">Seleccionar</button>
+                            </div>
+                        </div>
+                    \;
+                });
+            } catch (err) {
+                loader.style.display = 'none';
+                console.error("Error de conexión:", err);
+                alert("No se pudo conectar al servidor. ¿Está encendida la Ventana 1?");
+            }
+        }
+    </script>
+</body>
+</html>

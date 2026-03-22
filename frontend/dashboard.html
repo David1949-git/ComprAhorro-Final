@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComprAhorro - Tu Guía de Precios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 p-4 font-sans pb-20">
+    <div class="max-w-md mx-auto bg-slate-900 rounded-3xl p-6 text-white shadow-xl mb-6 border-b-4 border-green-500 text-center relative">
+        <p class="text-[10px] opacity-60 uppercase tracking-widest mb-1">¡Regístrate Gratis y Ahorra!</p>
+        <h1 class="text-3xl font-black italic">ComprAhorro</h1>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white rounded-3xl p-8 shadow-2xl text-center border border-gray-100 mb-8">
+        <div class="relative w-28 h-28 mx-auto mb-6">
+            <div class="absolute inset-1 bg-green-500 rounded-full flex items-center justify-center shadow-lg z-10 border-4 border-white">
+                <span class="text-white text-4xl">⚡</span>
+            </div>
+            <div class="absolute inset-0 grid grid-cols-2 gap-2 opacity-40">
+                <span>💊</span><span>🔨</span><span>🛒</span><span>🛋️</span>
+            </div>
+        </div>
+        
+        <h2 class="text-lg font-bold text-slate-800 mb-2 italic">"Centavo a centavo se hace el balboa"</h2>
+        <p class="text-xs text-slate-500 mb-6 font-semibold uppercase">Busca, compara y elige el mejor precio de Panamá</p>
+        
+        <input type="text" id="busqueda" placeholder="Ej: Arroz, Medicinas, Herramientas..." 
+               class="w-full p-4 rounded-xl border-2 border-gray-100 mb-5 outline-none focus:border-green-500 text-lg shadow-inner">
+        
+        <button onclick="buscarAhora()" 
+                class="w-full bg-slate-800 text-white font-bold py-4 rounded-xl hover:bg-slate-700 transition-all uppercase tracking-wider text-lg shadow-lg">
+            Buscar mi Ahorro
+        </button>
+        <p class="mt-4 text-[10px] text-green-600 font-bold uppercase tracking-tighter">⚠️ Uso 100% gratuito para todos los panameños</p>
+    </div>
+
+    <div id="r" class="max-w-md mx-auto space-y-4 pb-20"></div>
+
+    <script>
+        function buscarAhora() {
+            const query = document.getElementById('busqueda').value;
+            const resDiv = document.getElementById('r');
+            if(!query) return alert('Escribe lo que necesitas buscar, Capi.');
+
+            resDiv.innerHTML = '<div class="text-center p-8 bg-white rounded-2xl shadow font-bold text-slate-700 italic">"Al que busca, Dios le ayuda a ahorrar..."<br><span class="text-xs font-normal opacity-60">Ubicando las mejores ofertas...</span></div>';
+
+            fetch('http://localhost:3000/products/scrape?query=' + encodeURIComponent(query))
+                .then(res => res.json())
+                .then(data => {
+                    resDiv.innerHTML = '';
+                    if(!data || data.length === 0) {
+                        resDiv.innerHTML = '<div class="text-center p-8 bg-white rounded-2xl shadow">No encontramos ofertas para "' + query + '" en este momento.</div>';
+                        return;
+                    }
+                    data.forEach(item => {
+                        resDiv.innerHTML += `
+                            <a href="${item.link}" target="_blank" class="block bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-4">
+                                <div class="p-3 bg-slate-50 border-b border-gray-100 flex justify-between items-center">
+                                   <span class="text-[10px] font-black text-blue-800 uppercase">${item.supermercado}</span>
+                                   <span class="text-[9px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">DISPONIBLE</span>
+                                </div>
+                                <div class="p-4 flex items-center gap-4">
+                                    <img src="${item.imagen}" class="w-20 h-20 object-contain" alt="Producto">
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-slate-800 text-sm leading-tight mb-1">${item.nombre}</h4>
+                                        <p class="text-green-600 font-black text-xl">${item.precio}</p>
+                                        <p class="text-blue-500 text-[10px] font-bold mt-1">TAP PARA IR AL COMERCIO 🔗</p>
+                                    </div>
+                                </div>
+                            </a>`;
+                    });
+                })
+                .catch(err => {
+                    resDiv.innerHTML = '<div class="text-center p-8 text-red-600">Revisa tu conexión o intenta más tarde.</div>';
+                });
+        }
+    </script>
+</body>
+</html>

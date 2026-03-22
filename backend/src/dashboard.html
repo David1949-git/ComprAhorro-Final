@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComprAhorro - Dashboard Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background: #f8fafc; }
+        .card-glow { transition: all 0.3s ease; border: 2px solid #e2e8f0; }
+        .card-glow:hover { transform: translateY(-5px); border-color: #22c55e; box-shadow: 0 10px 25px rgba(34, 197, 94, 0.15); }
+        .logo-bounce { animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    </style>
+</head>
+<body class="p-4 bg-slate-50">
+    <div class="max-w-md mx-auto bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl p-6 text-white shadow-2xl mb-6">
+        <div class="flex justify-between items-center mb-2">
+            <h2 class="font-bold uppercase tracking-widest text-[10px] opacity-80">Nivel de Ahorrador</h2>
+            <span id="xpText" class="font-black text-xl text-yellow-400">0 XP</span>
+        </div>
+        <h1 id="rankName" class="text-4xl font-black italic uppercase tracking-tighter">Silver</h1>
+        <div class="w-full bg-blue-900/50 h-3 rounded-full mt-4 overflow-hidden border border-white/20">
+            <div id="xpBar" class="bg-yellow-400 h-full transition-all duration-1000" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white rounded-3xl p-8 shadow-xl text-center border border-gray-100 relative overflow-hidden">
+        <div class="bg-green-600 w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg logo-bounce">
+            <svg viewBox="0 0 24 24" class="w-10 h-10 text-white fill-current">
+                <path d="M13 10V3L4 14H11V21L20 10H13Z" />
+            </svg>
+        </div>
+        <h2 class="text-2xl font-black text-slate-800 mb-6 leading-tight">¿Qué quieres<br>ahorrar hoy?</h2>
+        
+        <div class="space-y-4">
+            <input type="text" id="productInput" placeholder="Ej: TV Sony, Arroz Pelín..." 
+                   class="w-full p-4 rounded-2xl border-2 border-slate-100 focus:border-green-500 outline-none text-lg font-bold transition-colors">
+            <button onclick="buscarOfertas()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-black py-4 rounded-2xl text-xl shadow-[0_4px_0_rgb(202,138,4)] active:translate-y-1 active:shadow-none transition-all">
+                BUSCAR OFERTAS
+            </button>
+        </div>
+    </div>
+
+    <div id="resultsArea" class="max-w-md mx-auto mt-8 space-y-4 pb-10"></div>
+
+    <script>
+        async function buscarOfertas() {
+            const query = document.getElementById('productInput').value;
+            if (!query) return;
+            
+            const resultsArea = document.getElementById('resultsArea');
+            resultsArea.innerHTML = 
+                <div class="text-center p-10">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-4 border-green-500 mb-4"></div>
+                    <p class="font-bold text-slate-500 italic">Consultando precios en Panamá...</p>
+                </div>
+            ;
+
+            try {
+                const response = await fetch('http://localhost:3000/products/scrape?query=' + encodeURIComponent(query));
+                const data = await response.json();
+                
+                resultsArea.innerHTML = '';
+                if(data.length === 0) {
+                    resultsArea.innerHTML = '<p class="text-center text-slate-500 font-bold">No se encontraron ofertas hoy.</p>';
+                }
+
+                data.forEach(item => {
+                    resultsArea.innerHTML += 
+                        <div class="bg-white p-5 rounded-3xl card-glow border-l-8 border-green-500 shadow-sm relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">\</p>
+                                <span class="bg-green-100 text-green-700 text-[9px] px-2 py-1 rounded-md font-black italic">OFERTA XP</span>
+                            </div>
+                            <h3 class="font-black text-slate-800 text-lg leading-tight mb-3">\</h3>
+                            <div class="flex justify-between items-center">
+                                <span class="text-3xl font-black text-slate-900">\\</span>
+                                <button class="bg-slate-900 text-white text-[10px] px-4 py-2 rounded-xl font-bold uppercase hover:bg-green-600 transition-colors">Ver Detalles</button>
+                            </div>
+                        </div>
+                    ;
+                });
+
+                // Ganar XP y actualizar
+                await fetch('http://localhost:3000/user/gain-xp', { method: 'POST' });
+                actualizarPerfil();
+            } catch (e) {
+                resultsArea.innerHTML = '<p class="text-red-500 text-center font-bold">Error: Verifica que el servidor (Ventana 1) esté corriendo.</p>';
+            }
+        }
+
+        async function actualizarPerfil() {
+            try {
+                const res = await fetch('http://localhost:3000/user/profile');
+                const user = await res.json();
+                document.getElementById('xpText').innerText = user.xp + ' XP';
+                document.getElementById('xpBar').style.width = (user.xp % 100) + '%';
+                
+                // Cambio dinámico de Rango
+                const rank = document.getElementById('rankName');
+                if(user.xp >= 100) rank.innerText = 'Gold';
+                if(user.xp >= 500) rank.innerText = 'Premium';
+            } catch(e) {}
+        }
+
+        actualizarPerfil();
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComprAhorro - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <nav class="bg-green-600 p-4 text-white font-bold text-center shadow-lg text-xl">
+        ⚡ ComprAhorro Panamá v3.0
+    </nav>
+
+    <div class="max-w-xl mx-auto mt-6 px-4">
+        <div id="user-stats" class="mb-6 p-4 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl text-white shadow-xl flex items-center justify-between border-b-4 border-blue-800">
+            <div>
+                <p class="text-[10px] font-bold opacity-80 uppercase tracking-widest">Nivel de Ahorrador</p>
+                <h2 id="user-level" class="text-2xl font-black">SILVER</h2>
+            </div>
+            <div class="text-right">
+                <p id="user-xp" class="text-lg font-bold">0 XP</p>
+                <div class="w-32 h-3 bg-black/20 rounded-full mt-1 overflow-hidden border border-white/30">
+                    <div id="xp-bar" class="h-full bg-yellow-400 transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-2xl p-8 text-center border border-gray-100">
+            <div class="flex justify-center mb-4">
+                <img src="/assets/logo.svg" alt="Logo" class="h-20 w-20 drop-shadow-md">
+            </div>
+            <h1 class="text-3xl font-black text-gray-800 mb-6">¿Qué quieres ahorrar hoy?</h1>
+            
+            <div class="flex gap-2">
+                <input type="text" id="bus" placeholder="Ej: Arroz, Café..." class="flex-1 p-4 rounded-2xl border-2 border-gray-100 focus:border-green-500 outline-none text-lg transition-all">
+                <button onclick="ejecutarBusqueda()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-8 rounded-2xl shadow-lg transition-transform active:scale-95">BUSCAR</button>
+            </div>
+        </div>
+
+        <div id="pantalla" class="mt-8 text-center text-gray-500 pb-10"></div>
+    </div>
+
+    <script>
+        async function refrescarPerfil() {
+            try {
+                const res = await fetch('/user/profile');
+                const user = await res.json();
+                document.getElementById('user-level').innerText = user.nivel;
+                document.getElementById('user-xp').innerText = user.xp + ' XP';
+                const porcentaje = Math.min((user.xp / 500) * 100, 100);
+                document.getElementById('xp-bar').style.width = porcentaje + '%';
+            } catch (e) { console.error('Error de perfil'); }
+        }
+
+        async function ejecutarBusqueda() {
+            const b = document.getElementById('bus');
+            const p = document.getElementById('pantalla');
+            if (!b.value) return;
+
+            p.innerHTML = '<div class="flex flex-col items-center gap-2"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div><p class="text-green-600 font-bold italic">Consultando IA y ganando XP...</p></div>';
+
+            try {
+                await fetch('/user/gain-xp', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ puntos: 10 })
+                });
+                
+                const res = await fetch('/products/search?q=' + encodeURIComponent(b.value));
+                const data = await res.json();
+                refrescarPerfil();
+
+                if (data.length === 0) {
+                    p.innerHTML = '<p class="bg-yellow-100 p-4 rounded-xl text-yellow-700 font-bold">No encontré ofertas hoy, ¡intenta con otro producto!</p>';
+                } else {
+                    p.innerHTML = '<div class="grid gap-4">' + data.map(item => `
+                        <div class="border p-4 rounded-2xl shadow-md bg-white text-left border-l-8 border-green-500 hover:shadow-lg transition-shadow">
+                            <p class="text-[10px] font-bold text-blue-600 uppercase tracking-tighter">${item.supermercado || 'Supermercado'}</p>
+                            <p class="font-bold text-gray-800 text-lg">${item.nombre}</p>
+                            <div class="flex justify-between items-end mt-2">
+                                <p class="text-2xl font-black text-green-600">$${item.precio}</p>
+                                <span class="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-md font-bold text-white">OFERTA XP</span>
+                            </div>
+                        </div>
+                    `).join('') + '</div>';
+                }
+            } catch (err) { p.innerHTML = '<p class="text-red-500 font-bold italic">❌ Error de conexión con el servidor.</p>'; }
+        }
+        refrescarPerfil();
+    </script>
+</body>
+</html>

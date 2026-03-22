@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <path d="M50 5 L90 25 V75 L50 95 L10 75 V25 Z" fill="#16a34a" stroke="#15803d" stroke-width="2"/>
+  <path d="M50 20 L35 50 H50 L40 80 L65 45 H50 L60 20 Z" fill="#facc15" stroke="#eab308" stroke-width="2"/>
+  <text x="50" y="70" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">CA</text>
+</svg>

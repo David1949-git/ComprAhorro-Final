@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SúperAhorro Panamá</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">`n</head>
+<body class="bg-slate-50 font-sans min-h-screen flex flex-col items-center justify-center p-6">
+
+    <div class="max-w-xl w-full bg-white rounded-[40px] shadow-2xl p-12 text-center border border-gray-100">
+        <div class="w-32 h-32 bg-green-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg rotate-3">
+            <svg class="w-20 h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+        </div>
+
+        <h1 class="text-5xl font-black text-slate-900 mb-2" style="font-family: 'Montserrat';">SúperAhorro</h1>
+        <p class="text-blue-600 font-bold mb-8 tracking-widest uppercase text-sm">Tu aliado inteligente en cada compra</p>
+
+        <div class="bg-green-100 text-green-700 font-black py-2 px-6 rounded-full inline-block mb-8 text-xs uppercase">
+            ¡REGISTRO 100% GRATIS!
+        </div>
+
+        <p class="text-slate-600 mb-10 leading-relaxed font-medium">
+            ¿Para qué sirve? Compara precios de distintos comercios en tiempo real y encuentra dónde está la verdadera oferta.
+        </p>
+
+        <div class="bg-blue-50 p-6 rounded-3xl mb-10 border-2 border-blue-100 italic text-blue-800 font-medium">
+            "Hijos, cada dólar que ahorramos aquí es un dólar más para el futuro. ¡Vamos a buscar las mejores ofertas!"
+        </div>
+
+        <button onclick="location.href='dashboard.html'" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-5 rounded-3xl text-2xl shadow-xl transition-all hover:scale-105 active:scale-95">
+            ¡Empezar a Ahorrar!
+        </button>
+    </div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('SúperAhorro: PWA Lista y Confiable!', reg))
+        .catch(err => console.log('Error al registrar PWA', err));
+    });
+  }
+</script>
+</body>
+</html>
+
+
