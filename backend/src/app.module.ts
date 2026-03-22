@@ -1,14 +1,21 @@
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
-import { ProductsModule } from './products/products.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
+import { ReferralsModule } from './referrals/referrals.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'frontend'),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: 'postgresql://neondb_owner:npg_Euc32MbTCVkB@ep-aged-cell-ah5n6b3v-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require',
+      autoLoadEntities: true,
+      synchronize: true,
+      ssl: true,
     }),
-    ProductsModule,
+    UsersModule,
+    ReferralsModule,
+    TransactionsModule,
   ],
 })
 export class AppModule {}

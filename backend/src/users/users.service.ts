@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
@@ -10,17 +10,23 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(userData: Partial<User>) {
-    const nuevoCodigo = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const user = this.usersRepository.create({
-      ...userData,
-      codigoReferido: nuevoCodigo,
+  // Este es el método que el Controller está pidiendo a gritos
+  async crearUsuario(datos: any) {
+    console.log('--- GUARDANDO EN NEON: ' + datos.email + ' ---');
+    const nuevoUsuario = this.usersRepository.create({
+      ...datos,
+      nivel: 'Bronce',
+      referidos_activos: 0,
+      saldo_bonos: 5.00 // Tu pilar de transparencia: bono de bienvenida
     });
-    return this.usersRepository.save(user);
+    return await this.usersRepository.save(nuevoUsuario);
   }
 
-  async registrarCompra(userId: number, montoBase: number) {
-    const comisionEnlace = montoBase * 0.10;
-    return { itbm: montoBase * 0.07, servicioEnlace: comisionEnlace };
+  // Lógica de niveles para el futuro cercano
+  calcularNivel(numeroReferidos: number) {
+    if (numeroReferidos >= 50) return 'Diamante';
+    if (numeroReferidos >= 15) return 'Oro';
+    if (numeroReferidos >= 5) return 'Plata';
+    return 'Bronce';
   }
 }

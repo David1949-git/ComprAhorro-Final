@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: comprahorro-backend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_Euc32MbTCVkB@ep-aged-cell-ah5n6b3v-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - key: PORT
+        value: 10000

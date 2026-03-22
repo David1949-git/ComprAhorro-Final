@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
-@Entity("users")
+@Entity('usuarios')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -8,9 +8,21 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Column({ default: 'Bronce' })
+  nivel: string;
+
+  @Column({ default: 0 })
+  referidos_activos: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  saldo_bonos: number;
+
+  @Column({ nullable: true })
+  codigo_referido_padre: string;
+
+  @CreateDateColumn()
+  fecha_registro: Date;
 }
