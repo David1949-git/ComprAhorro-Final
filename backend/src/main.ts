@@ -10,6 +10,6 @@ async function bootstrap() {
   // Puerto profesional para Render/Local
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  console.log('--- SERVIDOR SÚPERAHORRO: ONLINE EN PUERTO ' + port + ' ---');
+  console.log('--- SERVIDOR ComprAhorro: ONLINE EN PUERTO ' + port + ' ---');
 }
 bootstrap();
