@@ -3,98 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComprAhorro - Tu Central de Compras Inteligente</title>
+    <title>ComprAhorro - Tu Guía de Precios</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @keyframes rotate-icons {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .icon-ring {
-            animation: rotate-icons 25s linear infinite;
-        }
-    </style>
 </head>
-<body class="bg-slate-50 p-4 font-sans pb-20 text-slate-900">
-    
-    <div class="max-w-md mx-auto bg-white rounded-3xl p-6 shadow-xl mb-6 border-b-4 border-slate-900 text-center relative overflow-hidden">
-        <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/absurdity.png')]"></div>
-        <div class="relative z-10">
-            <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-1 font-bold">Inteligencia de Mercado - Panamá</p>
-            <h1 class="text-4xl font-black italic text-slate-900 tracking-tighter">ComprAhorro</h1>
+<body class="bg-slate-50 font-sans pb-24">
+    <div class="max-w-md mx-auto bg-slate-900 text-white p-6 rounded-b-[3rem] shadow-2xl border-b-4 border-green-500 relative overflow-hidden">
+        <div class="flex justify-between items-center mb-6 relative z-10">
+            <h1 class="text-2xl font-black italic tracking-tighter text-white">ComprAhorro 🐷</h1>
+            <span id="user-nivel" class="bg-green-500 text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest shadow-lg text-white">Bronce</span>
+        </div>
+        <div class="text-center py-4 relative z-10 text-white">
+            <p class="text-[10px] opacity-60 uppercase mb-1 font-bold tracking-widest text-white">Saldo para Ahorrar</p>
+            <h2 id="user-saldo" class="text-5xl font-black text-green-400 drop-shadow-md">$0.00</h2>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-6 border-t border-white/10 pt-4 relative z-10 text-center">
+            <div><p id="user-referidos" class="text-xl font-bold text-white">0</p><p class="text-[9px] opacity-50 uppercase font-black text-white">Referidos Activos</p></div>
+            <div><p class="text-xl font-bold text-white">Próximo</p><p class="text-[9px] opacity-50 uppercase font-black text-white">Meta Nivel Plata</p></div>
         </div>
     </div>
-
-    <div class="max-w-md mx-auto bg-white rounded-3xl p-8 shadow-2xl text-center border border-gray-100 mb-8 relative">
-        <div class="relative w-44 h-44 mx-auto mb-6 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full border-2 border-dashed border-green-200 icon-ring">
-                <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl" title="Supermercado">🛒</span>
-                <span class="absolute top-[15%] right-[10%] text-2xl" title="Farmacia">💊</span>
-                <span class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 text-2xl" title="Autos">🚗</span>
-                <span class="absolute bottom-[15%] right-[10%] text-2xl" title="Ferretería">🔨</span>
-                <span class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-2xl" title="Tecnología">💻</span>
-                <span class="absolute bottom-[15%] left-[10%] text-2xl" title="Moda">👕</span>
-                <span class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 text-2xl" title="Hogar">🛋️</span>
-            </div>
-            <div class="relative w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg z-10 border-4 border-white">
-                <span class="text-white text-5xl">🐷</span>
-                <span class="absolute -top-2 -right-2 text-3xl">💰</span>
+    <div class="max-w-md mx-auto mt-8 px-6 text-center">
+        <div class="relative w-48 h-48 mx-auto mb-6 flex items-center justify-center">
+            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-green-500 z-20"><span class="text-6xl">🐷</span></div>
+            <div class="absolute inset-0 animate-[spin_25s_linear_infinite] opacity-90">
+                <span class="absolute top-0 left-1/2 -translate-x-1/2 text-3xl">🛒</span>
+                <span class="absolute top-6 right-6 text-3xl">💊</span>
+                <span class="absolute right-0 top-1/2 -translate-y-1/2 text-3xl">🏢</span>
+                <span class="absolute bottom-6 right-6 text-3xl">🔨</span>
+                <span class="absolute bottom-0 left-1/2 -translate-x-1/2 text-3xl">🚗</span>
+                <span class="absolute bottom-6 left-6 text-3xl">👕</span>
+                <span class="absolute left-0 top-1/2 -translate-y-1/2 text-3xl">⚙️</span>
             </div>
         </div>
-        
-        <h2 class="text-xl font-black text-slate-900 mb-3 leading-tight uppercase">Busca, Compara y Compra</h2>
-        <p class="text-sm text-slate-600 mb-6 font-medium">Del Súper al Auto, todo en un solo lugar y sin tener que visitar cada página.</p>
-        
-        <input type="text" id="busqueda" placeholder="¿Qué quieres ahorrar hoy?" 
-               class="w-full p-4 rounded-xl border-2 border-slate-100 mb-5 outline-none focus:border-green-500 text-lg shadow-inner bg-slate-50 font-semibold">
-        
-        <button onclick="buscarAhora()" 
-                class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-slate-800 transition-all uppercase tracking-wider text-lg shadow-lg">
-            Rastrear Mejores Precios
-        </button>
-        <p class="mt-4 text-[10px] text-green-700 font-bold uppercase tracking-tighter">⚡ Conectado al Mercado Panameño en Tiempo Real</p>
+        <h2 class="text-xl font-black text-slate-800 leading-tight italic">"Busca, compara y compra al mejor precio: <span class="text-green-600 block">desde un súper hasta un auto"</span></h2>
     </div>
-
-    <div id="r" class="max-w-md mx-auto space-y-4 pb-20"></div>
-
+    <div class="max-w-md mx-auto mt-8 px-4">
+        <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 ring-4 ring-slate-50">
+            <input type="text" id="busqueda" placeholder="Ej: Arroz, Batería, Zapatillas..." class="w-full p-4 rounded-xl border-2 border-gray-100 mb-4 outline-none focus:border-green-500 text-lg shadow-inner text-slate-700 font-medium">
+            <button onclick="buscarAhora()" class="w-full bg-slate-900 text-white font-black py-4 rounded-xl hover:bg-slate-800 transition-all uppercase tracking-widest shadow-lg active:scale-95">Buscar Ahorro 🔎</button>
+        </div>
+    </div>
+    <div id="r" class="max-w-md mx-auto mt-6 px-4 space-y-4 pb-20"></div>
     <script>
+        const API_BASE = "https://proyectocompras-hjwj.onrender.com";
+        const USER_EMAIL = "tester_david_2026@gmail.com"; 
+        async function cargarPerfil() {
+            try {
+                const res = await fetch(`${API_BASE}/api/users/register`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: USER_EMAIL, password: "Password123!" })
+                });
+                const data = await res.json();
+                if(data.id) {
+                    document.getElementById('user-saldo').innerText = `$${parseFloat(data.saldo_bonos).toFixed(2)}`;
+                    document.getElementById('user-referidos').innerText = data.referidos_activos;
+                    document.getElementById('user-nivel').innerText = data.nivel;
+                }
+            } catch (e) { console.error("Error de conexión"); }
+        }
         function buscarAhora() {
             const query = document.getElementById('busqueda').value;
             const resDiv = document.getElementById('r');
-            if(!query) return alert('Dime qué buscas, Capi.');
-
-            resDiv.innerHTML = '<div class="text-center p-8 bg-white rounded-2xl shadow font-bold text-slate-700 italic">Investigando precios en todo Panamá...<br><span class="text-xs font-normal opacity-60">No necesitas buscar en otro lado, yo lo hago por ti.</span></div>';
-
-            fetch('https://proyectocompras-hjwj.onrender.com/products/scrape?query=' + encodeURIComponent(query))
-                .then(res => res.json())
-                .then(data => {
+            if(!query) return alert('¿Qué buscamos hoy, Capi?');
+            resDiv.innerHTML = '<div class="text-center p-8 font-bold text-slate-500 animate-pulse italic text-slate-700">Rastreando precios en Panamá...</div>';
+            fetch(`${API_BASE}/products/scrape?query=${encodeURIComponent(query)}`)
+                .then(res => res.json()).then(data => {
                     resDiv.innerHTML = '';
-                    if(!data || data.length === 0) {
-                        resDiv.innerHTML = '<div class="text-center p-8 bg-white rounded-2xl shadow">No encontramos ofertas para "' + query + '" en este momento.</div>';
-                        return;
-                    }
+                    if(!data || data.length === 0) { resDiv.innerHTML = '<div class="text-center p-8 bg-white rounded-2xl shadow">No hay ofertas para eso hoy.</div>'; return; }
                     data.forEach(item => {
-                        resDiv.innerHTML += 
-                            <a href="\" target="_blank" class="block bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-4 hover:scale-[1.02] transition-all">
-                                <div class="p-3 bg-slate-50 border-b border-gray-100 flex justify-between items-center">
-                                   <span class="text-[10px] font-black text-blue-800 uppercase">\</span>
-                                   <span class="text-[9px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">OFERTA ACTIVA</span>
-                                </div>
-                                <div class="p-4 flex items-center gap-4">
-                                    <img src="\" class="w-20 h-20 object-contain" alt="Producto">
-                                    <div class="flex-1">
-                                        <h4 class="font-bold text-slate-800 text-sm leading-tight mb-1">\</h4>
-                                        <p class="text-green-600 font-black text-xl">\</p>
-                                        <p class="text-blue-600 text-[10px] font-bold mt-1">IR A LA TIENDA DIRECTO 🔗</p>
-                                    </div>
-                                </div>
-                            </a>\;
+                        resDiv.innerHTML += `<div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden flex p-4 gap-4 items-center">
+                            <img src="${item.imagen}" class="w-16 h-16 object-contain rounded-lg">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-slate-800 text-[11px] leading-tight mb-1 uppercase">${item.nombre}</h4>
+                                <p class="text-green-600 font-black text-xl">${item.precio}</p>
+                                <span class="text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase italic">${item.supermercado}</span>
+                            </div><a href="${item.link}" target="_blank" class="bg-slate-100 p-3 rounded-full hover:bg-green-100 transition-colors">🔗</a></div>`;
                     });
-                })
-                .catch(err => {
-                    resDiv.innerHTML = '<div class="text-center p-8 text-red-600">Error de conexión con el radar. Reintenta.</div>';
-                });
+                }).catch(err => { resDiv.innerHTML = '<div class="text-center p-8 text-red-500 font-bold text-sm">El servidor está despertando. Reintenta en 10 seg.</div>'; });
         }
+        window.onload = cargarPerfil;
     </script>
 </body>
 </html>
