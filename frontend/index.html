@@ -9,19 +9,27 @@
 </head>
 <body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4 font-sans text-gray-900">
     
-    <div id="main-app" class="w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-gray-100">
-        <div class="text-7xl mb-6">🐷</div>
+    <div id="main-app" class="w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-gray-100 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 rounded-l-full"></div>
+        <div class="absolute top-0 right-0 w-1.5 h-full bg-yellow-500 rounded-r-full"></div>
+
+        <div class="text-6xl mb-6 mx-auto w-24 h-24 flex items-center justify-center bg-gray-100 rounded-full border border-gray-200 shadow-inner">
+            🐷
+        </div>
+
         <h1 class="text-4xl font-black tracking-tighter mb-2">ComprAhorro</h1>
         <p class="text-gray-500 mb-10 text-lg font-medium italic">"Busca, compara y ahorra"</p>
 
         <div class="relative mb-8">
-            <input type="text" id="ai-search" placeholder="¿Qué quieres comprar hoy?" 
+            <input type="text" id="ai-search" placeholder="Ej: batidora o llantas baratas..." 
                 class="w-full p-6 bg-gray-100 rounded-3xl border-2 border-transparent focus:border-black outline-none text-lg shadow-inner">
-            <button onclick="buscarConIA()" class="absolute right-3 top-3 bottom-3 px-6 bg-black text-white rounded-2xl font-bold">Buscar</button>
+            <button onclick="buscarConIA()" class="absolute right-3 top-3 bottom-3 px-6 bg-black text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all">Buscar</button>
         </div>
 
-        <div id="resultados-grid" class="grid grid-cols-2 gap-4">
-            </div>
+        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-4">Opciones de búsqueda:</p>
+        <div id="resultados-grid" class="flex flex-wrap justify-center gap-4 text-2xl opacity-50">
+            <span>🛒</span><span>💊</span><span>🚗</span><span>🏠</span><span>📱</span><span>🛠️</span><span>🍕</span>
+        </div>
     </div>
 
     <div id="business-visor" class="fixed inset-0 bg-white z-50 hidden flex flex-col">
@@ -34,27 +42,7 @@
     </div>
 
     <div id="invoice-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl">
-            <h2 class="text-2xl font-black mb-6 text-center">Resumen de tu Ahorro</h2>
-            <div id="factura-detalle" class="space-y-3 border-t border-b py-4 font-medium text-gray-700"></div>
-            <button onclick="irAPreferidos()" class="w-full py-4 bg-black text-white rounded-2xl font-bold text-lg mt-6">Confirmar y Pagar</button>
         </div>
-    </div>
-
-    <div id="referral-modal" class="fixed inset-0 bg-black/90 z-[70] hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl text-center">
-            <div class="text-5xl mb-4">🎁</div>
-            <h2 class="text-2xl font-black mb-2">¡Gana Dinero Real!</h2>
-            <p class="text-gray-500 text-sm mb-6">Refiere a 3 amigos. Por cada uno que use la App, recibes <b>.00</b> de bono.</p>
-            <div class="space-y-3 mb-6">
-                <input type="tel" id="ref-1" placeholder="WhatsApp Amigo 1" class="w-full p-4 bg-gray-100 rounded-2xl border-none outline-none font-bold">
-                <input type="tel" id="ref-2" placeholder="WhatsApp Amigo 2" class="w-full p-4 bg-gray-100 rounded-2xl border-none outline-none font-bold">
-                <input type="tel" id="ref-3" placeholder="WhatsApp Amigo 3" class="w-full p-4 bg-gray-100 rounded-2xl border-none outline-none font-bold">
-            </div>
-            <button onclick="enviarInvitaciones()" class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold text-lg shadow-lg">Invitar y Finalizar</button>
-            <button onclick="location.reload()" class="mt-4 text-gray-400 text-xs font-bold uppercase underline">Omitir</button>
-        </div>
-    </div>
 
     <script src="app.js"></script>
 </body>
