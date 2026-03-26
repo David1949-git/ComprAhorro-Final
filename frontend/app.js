@@ -1,5 +1,5 @@
-// CONFIGURACIÓN: Cambia esto por tu URL de Render cuando la tengas
-const API_URL = 'http://localhost:10000'; 
+// CONFIGURACIÓN: URL de Producción vinculada
+const API_URL = 'https://proyectocompras-hjwj.onrender.com';
 
 async function iniciar() {
     const nombre = document.getElementById('nombre').value;
@@ -11,6 +11,7 @@ async function iniciar() {
     }
 
     try {
+        console.log("Conectando a producción...");
         const response = await fetch(\/auth/registro-rapido, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -21,11 +22,14 @@ async function iniciar() {
 
         if (response.ok) {
             console.log('Registro exitoso:', data);
-            alert("¡Bienvenido, David! El motor está en marcha.");
+            alert("¡Bienvenido, David! El motor está en marcha en la nube.");
             localStorage.setItem('user', JSON.stringify(data.user));
-            // Siguiente paso: Redirigir al buscador
+            // Aquí el sistema ya te reconoce como usuario oficial
+        } else {
+            alert("Error del servidor: " + data.message);
         }
     } catch (error) {
-        alert("El servidor está calentando motores. Intenta de nuevo en 5 segundos.");
+        console.error("Error de conexión:", error);
+        alert("El servidor en Render está despertando. Dale 10 segundos e intenta de nuevo.");
     }
 }
