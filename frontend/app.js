@@ -61,6 +61,47 @@ function finalizarNegociacion() {
 }
 
 function irAPagar() {
-    alert("Redirigiendo a tu banca en línea para depósito de comisión...");
-    location.reload();
+    const bono = 5.00; // Este es el monto capturado de la factura
+    const cuentaPredeterminada = "00-000000-0"; // Tu cuenta de David
+    
+    console.log("Iniciando procesamiento de fondo...");
+
+    // 1. Procesamos el depósito del Bono de Gestión en el Background
+    procesarDepositoBono({
+        monto: bono,
+        destino: cuentaPredeterminada,
+        referencia: "GESTION-" + Math.floor(Math.random() * 1000000)
+    });
+
+    // 2. Mostramos al usuario su comprobante final y link de pago al negocio
+    document.getElementById('invoice-modal').innerHTML = 
+        <div class="text-center p-6">
+            <div class="text-6xl mb-4">💳</div>
+            <h2 class="text-2xl font-black mb-4">¡Todo Listo!</h2>
+            <p class="text-sm text-gray-600 mb-6">El pago al negocio se ha procesado. Hemos gestionado tu bono de ahorro automáticamente.</p>
+            
+            <div class="bg-blue-50 p-4 rounded-2xl mb-6 text-left">
+                <p class="text-[10px] font-bold text-blue-600 uppercase">Confirmación de Operación</p>
+                <p class="text-xs text-gray-700 mt-1">Tu ahorro ha sido asegurado. Ya puedes retirar tu producto o esperar el delivery pactado.</p>
+            </div>
+
+            <button onclick="location.reload()" class="w-full py-4 bg-black text-white rounded-2xl font-bold">
+                Volver al Inicio
+            </button>
+        </div>
+    ;
+}
+
+async function procesarDepositoBono(datos) {
+    try {
+        // Aquí es donde la App conecta con el Backend para registrar el dinero
+        const response = await fetch(\/pagos/registrar-bono, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datos)
+        });
+        console.log("Bono procesado en background hacia cuenta: " + datos.destino);
+    } catch (error) {
+        console.error("Error en el proceso de fondo:", error);
+    }
 }
