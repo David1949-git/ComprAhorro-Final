@@ -9,7 +9,7 @@
 </head>
 <body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4 font-sans text-gray-900">
     
-    <div id="main-app" class="w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-gray-100 relative overflow-hidden">
+    <div id="main-app" class="w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-gray-100 relative overflow-hidden transition-all duration-300">
         <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 rounded-l-full"></div>
         <div class="absolute top-0 right-0 w-1.5 h-full bg-yellow-500 rounded-r-full"></div>
 
@@ -26,9 +26,10 @@
             <button onclick="buscarConIA()" class="absolute right-3 top-3 bottom-3 px-6 bg-black text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all">Buscar</button>
         </div>
 
-        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-4">Opciones de búsqueda:</p>
-        <div id="resultados-grid" class="flex flex-wrap justify-center gap-4 text-2xl opacity-50">
-            <span>🛒</span><span>💊</span><span>🚗</span><span>🏠</span><span>📱</span><span>🛠️</span><span>🍕</span>
+        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-4">OPCIONES DE BÚSQUEDA:</p>
+        <div id="iconos-representative" class="flex flex-wrap justify-center gap-4 text-2xl opacity-50">
+            <span title="Súper">🛒</span><span title="Farmacia">💊</span><span title="Autos">🚗</span>
+            <span title="Hogar">🏠</span><span title="Tech">📱</span><span title="Herramientas">🛠️</span><span title="Comida">🍕</span>
         </div>
     </div>
 

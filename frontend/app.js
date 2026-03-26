@@ -1,7 +1,7 @@
 const API_URL = 'https://proyectocompras-hjwj.onrender.com';
 let productoSeleccionado = {};
 
-// 1. Detección de Referido al entrar
+// 1. Detección de Referido al entrar (Hijo)
 const urlParams = new URLSearchParams(window.location.search);
 const referidoPor = urlParams.get('ref');
 if (referidoPor) {
@@ -9,11 +9,17 @@ if (referidoPor) {
 }
 
 // 2. FUNCIÓN DE BÚSQUEDA (El cerebro que conecta con la "batidora")
+//    Esta función debe simular sourcing visual de 4-6 visual cards.
 async function buscarConIA() {
-    const consulta = document.getElementById('ai-search').value;
+    const consultaInput = document.getElementById('ai-search');
+    const consulta = consultaInput.value;
     if (!consulta) return alert("Capi, dinos qué buscas (ej: batidora).");
 
-    // Simulamos sourcing de 4 opciones visuales
+    // Limpiamos la búsqueda anterior
+    const grid = document.getElementById('resultados-grid');
+    if(grid) grid.innerHTML = ''; 
+
+    // Simulamos sourcing de 4 opciones visuales para "batidora"
     const opciones = [
         { id: 1, negocio: "Ganga Online", precio: 35.00, img: "https://via.placeholder.com/150", link: "https://example.com" },
         { id: 2, negocio: "Ahorro Store", precio: 32.50, img: "https://via.placeholder.com/150", link: "https://example.com" },
@@ -21,8 +27,9 @@ async function buscarConIA() {
         { id: 4, negocio: "Auto Ventas", precio: 29.99, img: "https://via.placeholder.com/150", link: "https://example.com" }
     ];
 
-    const grid = document.getElementById('resultados-grid');
-    grid.innerHTML = opciones.map(opt => 
+    const mainApp = document.getElementById('main-app');
+    // Creamos la vitrina visual de resultados
+    const gridHtml = opciones.map(opt => 
         <div onclick="abrirNegocio('\', '\', \)" class="cursor-pointer bg-white border border-gray-100 rounded-3xl p-3 shadow-sm hover:scale-95 transition-all text-left">
             <img src="\" class="w-full h-24 object-cover rounded-2xl mb-2">
             <p class="text-[9px] font-bold text-blue-600 uppercase">\</p>
@@ -30,7 +37,28 @@ async function buscarConIA() {
             <p class="text-[8px] text-gray-400 mt-1 uppercase tracking-tighter">Clic para negociar</p>
         </div>
     ).join('');
+
+    // Reemplazamos las sugerencias de iconos por la vitrina de resultados (Cards visuales)
+    document.getElementById('iconos-representative').classList.add('hidden');
+    
+    // Si no existe el grid, lo creamos
+    let resultadosGrid = document.getElementById('resultados-grid');
+    if(!resultadosGrid) {
+        resultadosGrid = document.createElement('div');
+        resultadosGrid.id = 'resultados-grid';
+        resultadosGrid.className = 'grid grid-cols-2 gap-4 transition-opacity duration-300';
+        mainApp.appendChild(resultadosGrid);
+    }
+    
+    resultadosGrid.innerHTML = gridHtml;
+    mainApp.style.transform = 'translateY(0)';
+    consultaInput.value = ''; // Limpiamos el input
 }
+
+// 3. Activación de búsqueda con 'Enter'
+document.getElementById('ai-search').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') buscarConIA();
+});
 
 function abrirNegocio(url, nombre, precio) {
     productoSeleccionado = { nombre, precio };
@@ -46,9 +74,9 @@ function cerrarNegocio() {
 
 function finalizarNegociacion() {
     const precioBase = productoSeleccionado.precio;
-    const extras = 5.00; // Delivery o accesorios simulados
+    const extras = 5.00; // Simulación de accesorios/delivery
     const subtotal = precioBase + extras;
-    const itbms = subtotal * 0.07; 
+    const itbms = subtotal * 0.07; // 7% Panamá
     const bonoGestion = 5.00; // Tu Bono de Gestión invisible
     const total = subtotal + itbms + bonoGestion;
 
@@ -86,7 +114,7 @@ function irAPreferidos() {
                 <input type="tel" placeholder="WhatsApp Amigo 2" class="w-full p-4 bg-gray-100 rounded-2xl border-none outline-none font-bold">
                 <input type="tel" placeholder="WhatsApp Amigo 3" class="w-full p-4 bg-gray-100 rounded-2xl border-none outline-none font-bold">
             </div>
-            <button onclick="location.reload()" class="w-full py-4 bg-black text-white rounded-2xl font-bold">Enviar y Cerrar</button>
+            <button onclick="location.reload()" class="w-full py-4 bg-black text-white rounded-2xl font-bold hover:scale-105 transition-all">Enviar y Cerrar</button>
         </div>
     ;
 }
@@ -98,7 +126,7 @@ async function procesarDepositoBono(datos) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
-        console.log("Bono enviado en background");
+        console.log("Bono enviado en background a: " + datos.referidor);
     } catch (error) {
         console.error("Error en el background:", error);
     }
