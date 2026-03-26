@@ -3,33 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComprAhorro - Tu IA de Ahorro</title>
+    <title>ComprAhorro - IA de Ahorro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .iframe-container { height: calc(100vh - 120px); }
+    </style>
 </head>
 <body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4 font-sans">
-    <div class="w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-gray-100">
+    
+    <div id="main-app" class="w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-gray-100">
         <div class="text-7xl mb-6">🐷</div>
-        <h1 class="text-4xl font-black text-gray-900 tracking-tighter mb-2">ComprAhorro</h1>
-        <p class="text-gray-500 mb-10 text-lg font-medium">¿Qué quieres comprar al mejor precio hoy?</p>
+        <h1 class="text-4xl font-black text-gray-900 mb-2">ComprAhorro</h1>
+        <p class="text-gray-500 mb-10 text-lg font-medium italic">"Busca, compara y compra al mejor precio"</p>
 
-        <div class="relative group">
-            <input type="text" id="ai-search" 
-                placeholder="Ej: Carro de segunda barato o súper de la semana..." 
-                class="w-full p-6 bg-gray-100 rounded-3xl border-2 border-transparent focus:border-black focus:bg-white transition-all outline-none text-lg shadow-inner">
-            <button onclick="buscarConIA()" 
-                class="absolute right-3 top-3 bottom-3 px-6 bg-black text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all">
-                Buscar
-            </button>
+        <div class="relative mb-8">
+            <input type="text" id="ai-search" placeholder="¿Qué quieres comprar hoy?" 
+                class="w-full p-6 bg-gray-100 rounded-3xl border-2 border-transparent focus:border-black outline-none text-lg shadow-inner">
+            <button onclick="buscarConIA()" class="absolute right-3 top-3 bottom-3 px-6 bg-black text-white rounded-2xl font-bold">Buscar</button>
         </div>
 
-        <p class="mt-8 text-xs text-gray-400 font-bold uppercase tracking-widest mb-4">Puedes buscar en:</p>
-        <div class="flex justify-center gap-4 text-2xl opacity-50">
-            <span title="Súper">🛒</span><span title="Farmacia">💊</span><span title="Autos">🚗</span>
-            <span title="Hogar">🏠</span><span title="Tech">📱</span><span title="Herramientas">🛠️</span><span title="Comida">🍕</span>
+        <div id="resultados-grid" class="grid grid-cols-2 gap-4">
+            </div>
+    </div>
+
+    <div id="business-visor" class="fixed inset-0 bg-white z-50 hidden flex flex-col">
+        <div class="p-4 border-b flex justify-between items-center bg-gray-900 text-white">
+            <button onclick="cerrarNegocio()" class="text-sm font-bold text-gray-400 underline">← Volver a ComprAhorro</button>
+            <span id="visor-titulo" class="font-bold">Negociando...</span>
+            <button onclick="finalizarNegociacion()" class="bg-green-500 px-4 py-2 rounded-xl text-xs font-bold">FINALIZAR COMPRA</button>
+        </div>
+        <iframe id="iframe-negocio" src="" class="w-full iframe-container border-none"></iframe>
+    </div>
+
+    <div id="invoice-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl">
+            <h2 class="text-2xl font-black mb-6 text-center">Resumen de tu Ahorro</h2>
+            <div id="factura-detalle" class="space-y-3 border-t border-b py-4 font-medium text-gray-700">
+                </div>
+            <button onclick="irAPagar()" class="w-full py-4 bg-black text-white rounded-2xl font-bold text-lg mt-6">Confirmar y Pagar</button>
         </div>
     </div>
-    
-    <p class="mt-10 text-[10px] uppercase tracking-widest text-gray-400 font-bold">Panamá • El Salvador • Conectividad Total</p>
+
     <script src="app.js"></script>
 </body>
 </html>

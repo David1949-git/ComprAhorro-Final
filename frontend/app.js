@@ -1,58 +1,66 @@
-const API_URL = 'https://proyectocompras-hjwj.onrender.com';
+let productoSeleccionado = {};
 
 async function buscarConIA() {
     const consulta = document.getElementById('ai-search').value;
-    if (!consulta) return alert("Capi, dime qué estás buscando para poder ahorrarte dinero.");
+    if (!consulta) return alert("Capi, dinos qué buscas.");
 
-    console.log("IA buscando:", consulta);
-    
-    // Simulamos la respuesta del Scraper Inteligente 
-    const resultadoSimulado = {
-        producto: consulta,
-        precioOriginal: 100.00,
-        precioAhorro: 85.00,
-        ahorroTotal: 15.00,
-        comision: 1.50 // 10% del ahorro
-    };
+    // Simulación de sourcing de 4 opciones
+    const opciones = [
+        { id: 1, negocio: "Super X", precio: 85.00, img: "https://via.placeholder.com/150", link: "https://example.com/item1" },
+        { id: 2, negocio: "Auto Ventas", precio: 82.50, img: "https://via.placeholder.com/150", link: "https://example.com/item2" },
+        { id: 3, negocio: "Ahorro Store", precio: 79.99, img: "https://via.placeholder.com/150", link: "https://example.com/item3" },
+        { id: 4, negocio: "Ganga Online", precio: 88.00, img: "https://via.placeholder.com/150", link: "https://example.com/item4" }
+    ];
 
-    mostrarResultado(resultadoSimulado);
+    const grid = document.getElementById('resultados-grid');
+    grid.innerHTML = opciones.map(opt => 
+        <div onclick="abrirNegocio('\', '\', \)" class="cursor-pointer bg-white border rounded-3xl p-3 shadow-sm hover:scale-95 transition-all text-left">
+            <img src="\" class="w-full h-24 object-cover rounded-2xl mb-2">
+            <p class="text-[9px] font-bold text-blue-600 uppercase">\</p>
+            <p class="font-bold text-gray-900 leading-none">$\</p>
+            <p class="text-[8px] text-gray-400 mt-1 uppercase tracking-tighter">Clic para negociar</p>
+        </div>
+    ).join('');
 }
 
-function mostrarResultado(res) {
-    const container = document.querySelector('.w-full.max-w-lg');
-    container.innerHTML = 
-        <div class="animate-fade-in text-left">
-            <div class="text-5xl mb-4 text-center">✅</div>
-            <h2 class="text-2xl font-bold mb-4 text-center">¡Ahorro Encontrado!</h2>
-            <div class="bg-green-50 p-6 rounded-3xl mb-6">
-                <p class="text-sm text-green-600 font-bold uppercase">Resultado para: "\"</p>
-                <p class="text-3xl font-black text-gray-900 mt-2">$\</p>
-                <p class="text-sm text-gray-500">Precio normal: <span class="line-through">$\</span></p>
-                <p class="mt-2 font-bold text-green-700">🎉 Te ahorras: $\</p>
-            </div>
+function abrirNegocio(url, nombre, precio) {
+    productoSeleccionado = { nombre, precio };
+    document.getElementById('visor-titulo').innerText = "Negociando en: " + nombre;
+    document.getElementById('iframe-negocio').src = url;
+    document.getElementById('business-visor').classList.remove('hidden');
+}
 
-            <div class="bg-gray-100 p-6 rounded-3xl mb-6">
-                <p class="font-bold text-gray-800 mb-2">💰 Instrucciones de Compra:</p>
-                <p class="text-sm text-gray-600 mb-4">Para ejecutar esta compra y asegurar el precio, deposita la comisión del servicio:</p>
-                <div class="bg-white p-4 rounded-2xl border-2 border-dashed border-gray-300">
-                    <p class="text-xs font-bold text-gray-400">CUENTA BANCARIA (PANAMÁ/GLOBAL)</p>
-                    <p class="font-mono font-bold text-lg">BANCO GENERAL</p>
-                    <p class="font-mono">Cuenta: 00-000000-0</p>
-                    <p class="font-mono text-blue-600 font-bold mt-2">Monto a depositar: $\</p>
-                </div>
-            </div>
+function cerrarNegocio() {
+    document.getElementById('business-visor').classList.add('hidden');
+    document.getElementById('iframe-negocio').src = "";
+}
 
-            <button onclick="enviarComprobante('\')" 
-                class="w-full py-4 bg-green-500 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-green-600 transition">
-                Enviar Comprobante por WhatsApp
-            </button>
-            
-            <button onclick="location.reload()" class="w-full mt-4 text-gray-400 text-sm font-bold">Nueva Búsqueda</button>
+function finalizarNegociacion() {
+    // Simulamos que el usuario negoció y acordó el precio base + accesorios
+    const precioBase = productoSeleccionado.precio;
+    const extras = 15.00; // Ejemplo de delivery o accesorios acordados
+    const subtotal = precioBase + extras;
+    const itbms = subtotal * 0.07; // 7% Panamá
+    const bonoGestion = 5.00; // Lo que el vendedor no ve
+    const total = subtotal + itbms + bonoGestion;
+
+    const facturaHtml = 
+        <div class="flex justify-between text-sm"><span>Precio Negociado</span><span>$\</span></div>
+        <div class="flex justify-between text-sm"><span>Accesorios/Delivery</span><span>$\</span></div>
+        <div class="flex justify-between text-sm"><span>ITBMS (7%)</span><span>$\</span></div>
+        <div class="flex justify-between font-bold text-blue-600 border-t pt-2">
+            <span>Bono de Gestión de Ahorro</span><span>$\</span>
+        </div>
+        <div class="flex justify-between text-xl font-black border-t-2 border-black pt-2 mt-2">
+            <span>TOTAL A PAGAR</span><span>$\</span>
         </div>
     ;
+
+    document.getElementById('factura-detalle').innerHTML = facturaHtml;
+    document.getElementById('invoice-modal').classList.remove('hidden');
 }
 
-function enviarComprobante(prod) {
-    const mensaje = encodeURIComponent("¡Hola David! Ya realicé el depósito de la comisión para la compra de: " + prod);
-    window.open("https://wa.me/50700000000?text=" + mensaje); // Aquí va tu número real
+function irAPagar() {
+    alert("Redirigiendo a tu banca en línea para depósito de comisión...");
+    location.reload();
 }
