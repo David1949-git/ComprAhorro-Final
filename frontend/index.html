@@ -3,47 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComprAhorro - IA de Ahorro</title>
+    <title>ComprAhorro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style> .iframe-container { height: calc(100vh - 120px); } </style>
 </head>
-<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4 font-sans text-gray-900">
-    
-    <div id="main-app" class="w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-gray-100 relative overflow-hidden transition-all duration-300">
-        <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 rounded-l-full"></div>
-        <div class="absolute top-0 right-0 w-1.5 h-full bg-yellow-500 rounded-r-full"></div>
+<body class="bg-gray-50 flex flex-col items-center p-6 font-sans">
+    <div class="mb-4">
+        <img src="logo.png" alt="ComprAhorro" class="h-32 object-contain" onerror="this.style.display='none'">
+    </div>
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-6">ComprAhorro</h1>
 
-        <div class="text-6xl mb-6 mx-auto w-24 h-24 flex items-center justify-center bg-gray-100 rounded-full border border-gray-200 shadow-inner">
-            🐷
-        </div>
-
-        <h1 class="text-4xl font-black tracking-tighter mb-2">ComprAhorro</h1>
-        <p class="text-gray-500 mb-10 text-lg font-medium italic">"Busca, compara y ahorra"</p>
-
-        <div class="relative mb-8">
-            <input type="text" id="ai-search" placeholder="Ej: batidora o llantas baratas..." 
-                class="w-full p-6 bg-gray-100 rounded-3xl border-2 border-transparent focus:border-black outline-none text-lg shadow-inner">
-            <button onclick="buscarConIA()" class="absolute right-3 top-3 bottom-3 px-6 bg-black text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all">Buscar</button>
-        </div>
-
-        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-4">OPCIONES DE BÚSQUEDA:</p>
-        <div id="iconos-representative" class="flex flex-wrap justify-center gap-4 text-2xl opacity-50">
-            <span title="Súper">🛒</span><span title="Farmacia">💊</span><span title="Autos">🚗</span>
-            <span title="Hogar">🏠</span><span title="Tech">📱</span><span title="Herramientas">🛠️</span><span title="Comida">🍕</span>
-        </div>
+    <div class="w-full max-w-md flex bg-white shadow-lg rounded-full overflow-hidden mb-6 border border-gray-200">
+        <input type="text" id="prodInput" placeholder="¿Qué quieres BUSCAR hoy?" class="flex-grow p-4 outline-none text-gray-700">
+        <button id="btnBuscar" class="bg-black text-white font-bold px-8 py-4 hover:bg-gray-800 transition">BUSCAR</button>
     </div>
 
-    <div id="business-visor" class="fixed inset-0 bg-white z-50 hidden flex flex-col">
-        <div class="p-4 border-b flex justify-between items-center bg-gray-900 text-white">
-            <button onclick="cerrarNegocio()" class="text-sm font-bold text-gray-400 underline">← Volver</button>
-            <span id="visor-titulo" class="font-bold">Negociando...</span>
-            <button onclick="finalizarNegociacion()" class="bg-green-500 px-4 py-2 rounded-xl text-xs font-bold">FINALIZAR COMPRA</button>
-        </div>
-        <iframe id="iframe-negocio" src="" class="w-full iframe-container border-none"></iframe>
-    </div>
+    <p class="text-center text-sm text-gray-600 max-w-lg mb-8">
+        ComprAhorro busca por ti lo que necesitas y te muestra al instante <span class="text-blue-700 font-bold">varias opciones con sus precios</span>, todo en un solo lugar y <span class="text-blue-700 font-bold">en tiempo real</span>. Así podrás <span class="text-orange-500 font-bold">comprar directamente al comercio, maximizando tus ahorros</span> con total comodidad.
+    </p>
 
-    <div id="invoice-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center p-4">
-        </div>
+    <div class="w-full max-w-md bg-white shadow-sm rounded-lg border border-gray-100 p-2">
+        <div class="bg-gray-50 text-gray-500 text-xs font-bold text-center py-2 rounded mb-2">RESULTADOS DE BÚSQUEDA</div>
+        <div id="lista-ahorros" class="divide-y divide-gray-100"></div>
+    </div>
 
     <script src="app.js"></script>
 </body>

@@ -1,21 +1,28 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
-import { ReferralsModule } from './referrals/referrals.module';
-import { TransactionsModule } from './transactions/transactions.module';
+import { AhorrosModule } from './ahorros/ahorros.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: 'postgresql://neondb_owner:npg_Euc32MbTCVkB@ep-aged-cell-ah5n6b3v-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require',
-      autoLoadEntities: true,
-      synchronize: true,
-      ssl: true,
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        autoLoadEntities: true,
+        synchronize: true,
+        ssl: true,
+        extra: {
+          ssl: { rejectUnauthorized: false }
+        }
+      }),
     }),
-    UsersModule,
-    ReferralsModule,
-    TransactionsModule,
+    AhorrosModule
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
