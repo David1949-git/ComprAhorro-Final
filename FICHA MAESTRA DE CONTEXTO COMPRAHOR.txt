@@ -1,0 +1,53 @@
+FICHA MAESTRA DE CONTEXTO: COMPRAHORRO (Copiar y pegar para iniciar sesión)
+
+1. Visión del Proyecto y Experiencia de Usuario (UX)
+
+    Concepto Core: ComprAhorro NO es un inventario, es un Motor de Búsqueda Inteligente mediante un Agente de IA que rastrea precios reales de internet en tiempo real.
+
+    Diseño: La interfaz debe ser intuitiva, rápida y profesional, con una experiencia de uso al estilo Waze o Uber. Todo el proceso de búsqueda y comparación es transparente para el usuario en el frontend.
+
+2. Modelo de Monetización ("Sistema Booking" Invisible)
+
+    Precio Integrado: El usuario ve un único "Precio Final" que ya incluye una "Tarifa de Gestión" (comisión). No hay desgloses de comisiones a la vista del comprador.
+
+    Comisión Dinámica: La comisión inicia entre un 10% o 15% y disminuye automáticamente para el usuario conforme sube de nivel por lealtad o cuando la factura es muy elevada.
+
+    Flujo Split Payment: Al pagar, el sistema divide los fondos: el comercio recibe exactamente su precio base por el producto y ComprAhorro retiene automáticamente la comisión en su cuenta bancaria de gestión. El comercio nunca ve la comisión cobrada al cliente.
+
+3. Gamificación y Candados de Retención
+
+    Límites Estrictos: Un usuario no puede realizar más de 3 búsquedas sin concretar una compra.
+
+    Crecimiento Orgánico: Es obligatorio que el usuario proporcione referidos antes de poder cerrar la app o continuar usándola.
+
+    Niveles y Recompensas: Los usuarios suben de nivel ganando bonos a través de compras finalizadas y referidos aportados.
+
+4. Estado Técnico Actual (Logros)
+
+    Motor IA: SerpApi ya está integrado y rastreando precios reales.
+
+    Fórmula Activa: El backend ya intercepta el precio base y le suma automáticamente el 15% de comisión antes de enviarlo al frontend.
+
+    Conectividad: CORS habilitado; el frontend (puerto 3000) y el backend (puerto 10000) se comunican sin bloqueos. Las tarjetas del frontend ya dibujan datos reales.
+
+    Base de Datos: Conexión PostgreSQL en Neon establecida para registrar usuarios e historiales.
+
+5. Próximos Pasos de Desarrollo (El Plan Inmediato)
+
+    El Colador Local: Programar el filtro en el backend para que los resultados muestren exclusivamente tiendas de Panamá (Panafoto, Rodelag, Multimax, etc.) y eliminen resultados internacionales.
+
+    Activar Candados: Implementar la lógica del contador de las 3 búsquedas y el modal obligatorio de referidos en la base de datos Neon.
+
+    Lógica de Pagos: Configurar la pasarela para ejecutar el Split Payment automático al hacer clic en la compra.
+
+6. Arquitectura y Datos de Control
+
+    Frontend: HTML, Tailwind CSS, Vanilla JS. Trabajando en local (C:\AppCompras\frontend\) en el puerto 3000.
+
+    Backend: NestJS alojado en Render (comprahorro-backend.onrender.com), puerto 10000, ruta /ahorros/buscar.
+
+    Base de Datos: Neon (PostgreSQL).
+
+    Dominio: Info-compras Panama (GoDaddy).
+
+    API Key SerpApi: e531538be0b89765d2dc3f0eeea284e07c4566d9c143d9f66e51122b3073c3af
