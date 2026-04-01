@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Busqueda {
+  id        Int      @id @default(autoincrement())
+  usuarioId String
+  query     String
+  createdAt DateTime @default(now())
+}
+
+model Referido {
+  id          Int      @id @default(autoincrement())
+  idReferidor String
+  emailAmigo  String?
+  createdAt   DateTime @default(now())
+}
