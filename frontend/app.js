@@ -2,43 +2,64 @@ document.addEventListener('DOMContentLoaded', () => {
     const boton = document.getElementById('btnBuscar');
     const input = document.getElementById('prodInput');
     const lista = document.getElementById('lista-ahorros');
-
+    const API_LOCAL  = 'http://localhost:10000/ahorros/buscar';
+    const API_RENDER = 'https://proyectocompras-hjwj.onrender.com/ahorros/buscar';
+    let userLat = null; let userLng = null;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => { userLat = pos.coords.latitude.toFixed(6); userLng = pos.coords.longitude.toFixed(6); },
+            (err) => { console.warn('Ubicacion no disponible', err.message); }
+        );
+    }
+    function buildUrl(base, termino) {
+        let url = base + '?q=' + encodeURIComponent(termino);
+        if (userLat && userLng) { url += '&lat=' + userLat + '&lng=' + userLng; }
+        return url;
+    }
+    function mostrarSpinner(termino) {
+        lista.innerHTML = '<div class="p-8 text-center text-gray-500"><div class="inline-block w-6 h-6 border-4 border-gray-200 border-t-black rounded-full animate-spin mb-3"></div><p class="text-sm">Buscando: <b>' + termino + '</b>...</p></div>';
+    }
+    function mostrarError(msg) {
+        lista.innerHTML = '<div class="p-6 text-center"><p class="text-red-500 font-bold text-sm mb-1">No se pudo completar la busqueda</p><p class="text-gray-400 text-xs">' + msg + '</p></div>';
+    }
+    function mostrarResultados(resultados) {
+        if (!resultados || resultados.length === 0) { lista.innerHTML = '<div class="p-6 text-center text-gray-400 text-sm">No se encontraron ofertas.</div>'; return; }
+        let html = '<div class="grid grid-cols-2 gap-3 p-3">';
+        resultados.forEach(item => {
+            const img = item.imagen ? '<img src="' + item.imagen + '" class="w-full h-full object-contain p-2">' : '<span class="text-4xl">&#128722;</span>';
+            html += '<a href="' + item.link + '" target="_blank" class="flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden">';
+            html += '<div class="w-full h-36 bg-gray-50 flex items-center justify-center overflow-hidden">' + img + '</div>';
+            html += '<div class="p-2 flex flex-col flex-grow">';
+            html += '<p class="text-xs font-semibold text-gray-800 leading-tight mb-1" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">' + item.producto + '</p>';
+            html += '<p class="text-xs text-gray-400 truncate mb-2">' + item.tienda + '</p>';
+            html += '<p class="text-base font-extrabold text-green-700">' + item.precioFinal + '</p>';
+            html += '<p class="text-[9px] text-gray-400">Precio Final</p></div></a>';
+        });
+        html += '</div>';
+        lista.innerHTML = html;
+    }
     async function buscarEnTiendas(termino) {
         if (!lista) return;
-        lista.innerHTML = '<div class="p-8 text-center text-gray-500">Buscando opciones reales para: ' + termino + '...</div>';
-
+        mostrarSpinner(termino);
         try {
-            // Conexión directa al motor local en puerto 10000
-            const res = await fetch('http://localhost:10000/ahorros/buscar?q=' + encodeURIComponent(termino));
-            const resultados = await res.json();
-
-            if (!resultados || resultados.length === 0) {
-                lista.innerHTML = '<div class="p-4 text-center text-gray-500">No se encontraron ofertas en este momento.</div>';
-                return;
-            }
-
-            // Renderizado de tarjetas con la comisión invisible ya aplicada por el backend
-            lista.innerHTML = resultados.map(item => `
-                <div class="p-4 flex justify-between items-center border-b border-gray-100 hover:bg-gray-50">
-                    <div>
-                        <span class="font-bold text-gray-900 text-lg">${item.producto}</span>
-                        <p class="text-sm text-gray-600">${item.tienda}</p>
-                        <a href="${item.link}" target="_blank" class="text-xs text-blue-600 underline">Ver en tienda oficial</a>
-                    </div>
-                    <div class="text-right">
-                        <span class="block font-extrabold text-green-700 text-xl">$ ${item.precioFinal}</span>
-                        <span class="text-[10px] text-gray-400">Precio Final (Gestión Incluida)</span>
-                    </div>
-                </div>
-            `).join('');
-        } catch (e) {
-            console.error("Error de conexión:", e);
-            lista.innerHTML = '<div class="p-4 text-center text-red-500 font-bold">Error: No se pudo conectar con el motor de búsqueda (Puerto 10000).</div>';
-        }
+            const res = await fetch(buildUrl(API_LOCAL, termino), { signal: AbortSignal.timeout(5000) });
+            if (res.ok) { mostrarResultados(await res.json()); return; }
+        } catch (e) { console.warn('Local no disponible', e.message); }
+        try {
+            const res = await fetch(buildUrl(API_RENDER, termino), { signal: AbortSignal.timeout(15000) });
+            if (res.ok) { mostrarResultados(await res.json()); return; }
+            mostrarError('El servidor respondio con error.');
+        } catch (e) { mostrarError('No hay conexion con el servidor local ni con la nube.'); }
     }
-
     boton.addEventListener('click', () => {
         const producto = input.value.trim();
-        if (producto) buscarEnTiendas(producto);
+        if (!producto) {
+            input.classList.add('ring-2', 'ring-red-400');
+            input.placeholder = 'Escribe un producto primero!';
+            setTimeout(() => { input.classList.remove('ring-2','ring-red-400'); input.placeholder = 'Que quieres BUSCAR hoy?'; }, 2000);
+            return;
+        }
+        buscarEnTiendas(producto);
     });
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') boton.click(); });
 });

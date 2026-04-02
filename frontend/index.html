@@ -11,21 +11,15 @@
         <img src="logo.png" alt="ComprAhorro" class="h-32 object-contain" onerror="this.style.display='none'">
     </div>
     <h1 class="text-4xl font-extrabold text-gray-900 mb-6">ComprAhorro</h1>
-
-    <div class="w-full max-w-md flex bg-white shadow-lg rounded-full overflow-hidden mb-6 border border-gray-200">
+    <div class="w-full max-w-2xl flex bg-white shadow-lg rounded-full overflow-hidden mb-6 border border-gray-200">
         <input type="text" id="prodInput" placeholder="¿Qué quieres BUSCAR hoy?" class="flex-grow p-4 outline-none text-gray-700">
         <button id="btnBuscar" class="bg-black text-white font-bold px-8 py-4 hover:bg-gray-800 transition">BUSCAR</button>
     </div>
-
-    <p class="text-center text-sm text-gray-600 max-w-lg mb-8">
-        ComprAhorro busca por ti lo que necesitas y te muestra al instante <span class="text-blue-700 font-bold">varias opciones con sus precios</span>, todo en un solo lugar y <span class="text-blue-700 font-bold">en tiempo real</span>. Así podrás <span class="text-orange-500 font-bold">comprar directamente al comercio, maximizando tus ahorros</span> con total comodidad.
-    </p>
-
-    <div class="w-full max-w-md bg-white shadow-sm rounded-lg border border-gray-100 p-2">
+    <p class="text-center text-sm text-gray-600 max-w-lg mb-8">ComprAhorro busca por ti lo que necesitas y te muestra al instante <span class="text-blue-700 font-bold">varias opciones con sus precios</span>, todo en un solo lugar y <span class="text-blue-700 font-bold">en tiempo real</span>. Así podrás <span class="text-orange-500 font-bold">comprar directamente al comercio, maximizando tus ahorros</span> con total comodidad.</p>
+    <div class="w-full max-w-2xl bg-white shadow-sm rounded-xl border border-gray-100 p-2">
         <div class="bg-gray-50 text-gray-500 text-xs font-bold text-center py-2 rounded mb-2">RESULTADOS DE BÚSQUEDA</div>
-        <div id="lista-ahorros" class="divide-y divide-gray-100"></div>
+        <div id="lista-ahorros"></div>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
