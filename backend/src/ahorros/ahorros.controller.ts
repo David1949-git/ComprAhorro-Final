@@ -6,7 +6,11 @@ export class AhorrosController {
   constructor(private readonly ahorrosService: AhorrosService) {}
 
   @Get('buscar')
-  async buscar(@Query('q') q: string) {
-    return await this.ahorrosService.buscarProducto(q);
+  buscar(
+    @Query('q') q: string,
+    @Query('lat') lat?: string,
+    @Query('lng') lng?: string,
+  ) {
+    return this.ahorrosService.buscarProducto(q, lat, lng);
   }
 }
