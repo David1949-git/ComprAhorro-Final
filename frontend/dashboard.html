@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComprAhorro - Tu Guía de Precios</title>
+    <title>ComprAhorro - Tu APP del Ahorro</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 font-sans pb-24">
     <div class="max-w-md mx-auto bg-slate-900 text-white p-6 rounded-b-[3rem] shadow-2xl border-b-4 border-green-500 relative overflow-hidden">
         <div class="flex justify-between items-center mb-6 relative z-10">
-            <h1 class="text-2xl font-black italic tracking-tighter text-white">ComprAhorro 🐷</h1>
+            <div class="flex items-center gap-2">
+                <img src="logo.png" alt="ComprAhorro" class="w-10 h-10 object-contain">
+                <h1 class="text-2xl font-black italic tracking-tighter text-white">ComprAhorro</h1>
+            </div>
             <span id="user-nivel" class="bg-green-500 text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest shadow-lg text-white">Bronce</span>
         </div>
         <div class="text-center py-4 relative z-10 text-white">
@@ -23,7 +26,9 @@
     </div>
     <div class="max-w-md mx-auto mt-8 px-6 text-center">
         <div class="relative w-48 h-48 mx-auto mb-6 flex items-center justify-center">
-            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-green-500 z-20"><span class="text-6xl">🐷</span></div>
+            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-xl border-4 border-green-500 z-20">
+                <img src="logo.png" alt="Logo" class="w-16 h-16 object-contain">
+            </div>
             <div class="absolute inset-0 animate-[spin_25s_linear_infinite] opacity-90">
                 <span class="absolute top-0 left-1/2 -translate-x-1/2 text-3xl">🛒</span>
                 <span class="absolute top-6 right-6 text-3xl">💊</span>
@@ -34,7 +39,12 @@
                 <span class="absolute left-0 top-1/2 -translate-y-1/2 text-3xl">⚙️</span>
             </div>
         </div>
-        <h2 class="text-xl font-black text-slate-800 leading-tight italic">"Busca, compara y compra al mejor precio: <span class="text-green-600 block">desde un súper hasta un auto"</span></h2>
+        <p class="text-2xl font-black text-green-600 mb-2">¡Nosotros buscamos, tú ahorras!</p>
+        <div class="text-left bg-white rounded-2xl p-4 shadow-md border border-gray-100 mt-2">
+            <p class="text-slate-700 font-bold mb-1">✅ <span class="text-green-600">Compara</span> precios de varios comercios en tiempo real.</p>
+            <p class="text-slate-700 font-bold mb-1">✅ <span class="text-green-600">Elige</span> con total calma y tranquilidad.</p>
+            <p class="text-slate-700 font-bold">✅ <span class="text-green-600">Compra</span> directo sin intermediarios para tu máximo ahorro.</p>
+        </div>
     </div>
     <div class="max-w-md mx-auto mt-8 px-4">
         <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 ring-4 ring-slate-50">
@@ -44,42 +54,52 @@
     </div>
     <div id="r" class="max-w-md mx-auto mt-6 px-4 space-y-4 pb-20"></div>
     <script>
-        const API_BASE = "https://proyectocompras-hjwj.onrender.com";
-        const USER_EMAIL = "tester_david_2026@gmail.com"; 
-        async function cargarPerfil() {
-            try {
-                const res = await fetch(`${API_BASE}/api/users/register`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: USER_EMAIL, password: "Password123!" })
-                });
-                const data = await res.json();
-                if(data.id) {
-                    document.getElementById('user-saldo').innerText = `$${parseFloat(data.saldo_bonos).toFixed(2)}`;
-                    document.getElementById('user-referidos').innerText = data.referidos_activos;
-                    document.getElementById('user-nivel').innerText = data.nivel;
-                }
-            } catch (e) { console.error("Error de conexión"); }
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:10000'
+            : 'https://proyectocompras-hjwj.onrender.com';
+
+        // Cargar datos del usuario desde localStorage
+        function cargarPerfil() {
+            const userData = localStorage.getItem('comprAhorro_user');
+            if (userData) {
+                const user = JSON.parse(userData);
+                if (user.email) document.getElementById('user-nivel').innerText = user.nivel || 'Bronce';
+                if (user.saldo_bonos) document.getElementById('user-saldo').innerText = `$${parseFloat(user.saldo_bonos).toFixed(2)}`;
+                if (user.referidos_activos) document.getElementById('user-referidos').innerText = user.referidos_activos;
+            }
         }
+
         function buscarAhora() {
-            const query = document.getElementById('busqueda').value;
+            const query = document.getElementById('busqueda').value.trim();
             const resDiv = document.getElementById('r');
-            if(!query) return alert('¿Qué buscamos hoy, Capi?');
-            resDiv.innerHTML = '<div class="text-center p-8 font-bold text-slate-500 animate-pulse italic text-slate-700">Rastreando precios en Panamá...</div>';
-            fetch(`${API_BASE}/products/scrape?query=${encodeURIComponent(query)}`)
-                .then(res => res.json()).then(data => {
+            if (!query) return alert('¿Qué buscamos hoy?');
+            resDiv.innerHTML = '<div class="text-center p-8 font-bold text-slate-500 animate-pulse italic">Rastreando precios en Panamá...</div>';
+            fetch(`${API_BASE}/ahorros/buscar?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
                     resDiv.innerHTML = '';
-                    if(!data || data.length === 0) { resDiv.innerHTML = '<div class="text-center p-8 bg-white rounded-2xl shadow">No hay ofertas para eso hoy.</div>'; return; }
+                    if (!data || data.length === 0) {
+                        resDiv.innerHTML = '<div class="text-center p-8 bg-white rounded-2xl shadow">No hay ofertas para eso hoy.</div>';
+                        return;
+                    }
                     data.forEach(item => {
-                        resDiv.innerHTML += `<div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden flex p-4 gap-4 items-center">
+                        resDiv.innerHTML += `
+                        <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden flex p-4 gap-4 items-center">
                             <img src="${item.imagen}" class="w-16 h-16 object-contain rounded-lg">
                             <div class="flex-1">
-                                <h4 class="font-bold text-slate-800 text-[11px] leading-tight mb-1 uppercase">${item.nombre}</h4>
-                                <p class="text-green-600 font-black text-xl">${item.precio}</p>
-                                <span class="text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase italic">${item.supermercado}</span>
-                            </div><a href="${item.link}" target="_blank" class="bg-slate-100 p-3 rounded-full hover:bg-green-100 transition-colors">🔗</a></div>`;
+                                <h4 class="font-bold text-slate-800 text-[11px] leading-tight mb-1 uppercase">${item.producto}</h4>
+                                <p class="text-green-600 font-black text-xl">${item.precioFinal}</p>
+                                <span class="text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase italic">${item.tienda}</span>
+                            </div>
+                            <a href="${item.link}" target="_blank" class="bg-slate-100 p-3 rounded-full hover:bg-green-100 transition-colors">🔗</a>
+                        </div>`;
                     });
-                }).catch(err => { resDiv.innerHTML = '<div class="text-center p-8 text-red-500 font-bold text-sm">El servidor está despertando. Reintenta en 10 seg.</div>'; });
+                })
+                .catch(() => {
+                    resDiv.innerHTML = '<div class="text-center p-8 text-red-500 font-bold text-sm">El servidor está despertando. Reintenta en 10 seg.</div>';
+                });
         }
+
         window.onload = cargarPerfil;
     </script>
 </body>
