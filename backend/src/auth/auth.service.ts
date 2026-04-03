@@ -12,23 +12,25 @@ export class AuthService {
 
   async register(userData: any) {
     const newUser = this.userRepository.create(userData);
-    // Usamos double casting (as unknown as User) para que TS no proteste
     const savedUser = (await this.userRepository.save(newUser)) as unknown as User;
     return { status: "success", message: "Usuario guardado en Neon", id: savedUser.id };
   }
 
   async login(credentials: any) {
-    const user = await this.userRepository.findOne({ where: { email: credentials.email } });
-    
+    const user = await this.userRepository
+      .createQueryBuilder("user")
+      .addSelect("user.password")
+      .where("user.email = :email", { email: credentials.email })
+      .getOne();
+
     if (!user || user.password !== credentials.password) {
       throw new UnauthorizedException("Credenciales incorrectas en la DB");
     }
 
-    return { 
-      status: "success", 
-      message: "Login REAL exitoso", 
-      user: { id: user.id, email: user.email } 
+    return {
+      status: "success",
+      message: "Login REAL exitoso",
+      user: { id: user.id, email: user.email }
     };
   }
 }
-
