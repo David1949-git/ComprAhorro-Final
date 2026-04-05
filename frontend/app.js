@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('prodInput');
     const lista = document.getElementById('lista-ahorros');
     const API_LOCAL  = 'http://localhost:10000/ahorros/buscar';
-    const API_RENDER = 'https://proyectocompras-hjwj.onrender.com/ahorros/buscar';
+    const API_RENDER = 'https://comprahorro-backend.onrender.com/ahorros/buscar';
     let userLat = null; let userLng = null;
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
