@@ -27,7 +27,7 @@ export class AhorrosService {
           producto: item.title,
           tienda: item.source,
           precioFinal: item.price ? item.price.replace(/^\$+/, '$') : 'Precio no disponible',
-          link: item.product_link || item.link || '#',   // ← LÍNEA CORREGIDA
+          link: item.source_url || item.product_link || item.link || '#',   // ← LÍNEA CORREGIDA
           imagen: item.thumbnail || '',
         }));
       return resultados;
