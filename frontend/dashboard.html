@@ -54,6 +54,10 @@
     </div>
     <div id="r" class="max-w-md mx-auto mt-6 px-4 space-y-4 pb-20"></div>
     <script>
+        // Proteccion JWT
+        const token = localStorage.getItem('comprAhorro_token');
+        if (!token) { window.location.href = 'login.html'; }
+
         const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:10000'
             : 'https://proyectocompras-hjwj.onrender.com';
@@ -104,3 +108,5 @@
     </script>
 </body>
 </html>
+
+

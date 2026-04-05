@@ -64,6 +64,7 @@
                 const data = await response.json();
                 if (response.ok && data.status === 'success') {
                     localStorage.setItem('comprAhorro_user', JSON.stringify(data.user));
+                    localStorage.setItem('comprAhorro_token', data.token);
                     window.location.href = 'dashboard.html';
                 } else {
                     alert('Error: ' + (data.message || 'Credenciales incorrectas'));
@@ -78,3 +79,4 @@
     </script>
 </body>
 </html>
+
