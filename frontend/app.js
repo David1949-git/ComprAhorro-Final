@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const API_LOCAL  = 'http://localhost:10000/ahorros/buscar';
     const API_RENDER = 'https://comprahorro-backend.onrender.com/ahorros/buscar';
 
-    // Tiendas internacionales
     const TIENDAS_INTERNACIONALES = [
         { nombre: 'Amazon',      emoji: '📦', url: 'https://www.amazon.com/s?k=' },
         { nombre: 'eBay',        emoji: '🛒', url: 'https://www.ebay.com/sch/i.html?_nkw=' },
@@ -16,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     function mostrarSpinner(termino) {
-        lista.innerHTML = '<div class="p-8 text-center text-gray-500"><div class="inline-block w-6 h-6 border-4 border-gray-200 border-t-black rounded-full animate-spin mb-3"></div><p class="text-sm">Buscando: <b>' + termino + '</b>...</p></div>';
+        lista.innerHTML = '<div class="p-8 text-center text-gray-500"><div class="inline-block w-6 h-6 border-4 border-gray-200 border-t-black rounded-full animate-spin mb-3"></div><p class="text-sm">Buscando en tiendas de Panamá: <b>' + termino + '</b>...</p></div>';
     }
 
     function mostrarError(msg) {
@@ -63,11 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!lista) return;
         mostrarSpinner(termino);
         try {
-            const res = await fetch(API_LOCAL + '?q=' + encodeURIComponent(termino), { signal: AbortSignal.timeout(5000) });
+            const res = await fetch(API_LOCAL + '?q=' + encodeURIComponent(termino), { signal: AbortSignal.timeout(30000) });
             if (res.ok) { mostrarResultados(await res.json(), termino); return; }
         } catch (e) { console.warn('Local no disponible', e.message); }
         try {
-            const res = await fetch(API_RENDER + '?q=' + encodeURIComponent(termino), { signal: AbortSignal.timeout(15000) });
+            const res = await fetch(API_RENDER + '?q=' + encodeURIComponent(termino), { signal: AbortSignal.timeout(30000) });
             if (res.ok) { mostrarResultados(await res.json(), termino); return; }
             mostrarError('El servidor respondio con error.');
         } catch (e) { mostrarError('No hay conexion con el servidor local ni con la nube.'); }
