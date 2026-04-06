@@ -6,7 +6,11 @@ export class AhorrosController {
   constructor(private readonly ahorrosService: AhorrosService) {}
 
   @Get('buscar')
-  buscar(@Query('q') q: string) {
-    return this.ahorrosService.buscarProducto(q);
+  buscar(
+    @Query('q') q: string,
+    @Query('lat') lat?: string,
+    @Query('lon') lon?: string,
+  ) {
+    return this.ahorrosService.buscarProducto(q, lat, lon);
   }
 }

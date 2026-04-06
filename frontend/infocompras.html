@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoCompras — ComprAhorro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col items-center p-6 font-sans min-h-screen">
+
+    <div class="w-full max-w-2xl flex items-center justify-between mb-6">
+        <a href="index.html" class="text-sm text-gray-400 hover:text-black transition">← Volver a ComprAhorro</a>
+        <div class="flex items-center gap-2">
+            <span class="text-2xl">🛒</span>
+            <h1 class="text-2xl font-extrabold text-gray-900">InfoCompras</h1>
+        </div>
+        <span class="text-xs text-gray-300">by ComprAhorro</span>
+    </div>
+
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4">
+        <p class="text-xs font-bold text-gray-500 uppercase mb-2">🏪 Mi supermercado favorito</p>
+        <div class="flex flex-wrap gap-2" id="supermercados">
+            <button onclick="seleccionarSuper(this, 'PriceSmart')"  class="super-btn px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-black hover:text-white transition">PriceSmart</button>
+            <button onclick="seleccionarSuper(this, 'Rey')"         class="super-btn px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-black hover:text-white transition">El Rey</button>
+            <button onclick="seleccionarSuper(this, 'Super 99')"    class="super-btn px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-black hover:text-white transition">Super 99</button>
+            <button onclick="seleccionarSuper(this, 'Machetazo')"   class="super-btn px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-black hover:text-white transition">Machetazo</button>
+            <button onclick="seleccionarSuper(this, 'Riba Smith')"  class="super-btn px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-black hover:text-white transition">Riba Smith</button>
+            <button onclick="seleccionarSuper(this, 'Xtra')"        class="super-btn px-3 py-1.5 rounded-full border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-black hover:text-white transition">Xtra</button>
+        </div>
+        <p class="text-xs text-gray-400 mt-2" id="superSeleccionado">Ninguno seleccionado</p>
+    </div>
+
+    <div class="w-full max-w-2xl flex gap-2 mb-4">
+        <input type="text" id="inputProducto" placeholder="Agrega un producto a tu lista..."
+               class="flex-grow p-3 rounded-full border border-gray-200 bg-white shadow-sm outline-none text-sm text-gray-700 focus:ring-2 focus:ring-black">
+        <button onclick="agregarProducto()"
+                class="bg-black text-white font-bold px-6 py-3 rounded-full hover:bg-gray-800 transition text-sm">
+            + Agregar
+        </button>
+    </div>
+
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-4">
+        <div class="bg-gray-50 text-gray-500 text-xs font-bold text-center py-2 border-b border-gray-100">
+            📋 MI LISTA DE COMPRAS
+        </div>
+        <div id="listaCompras" class="divide-y divide-gray-50">
+            <div id="listaVacia" class="p-8 text-center text-gray-300 text-sm">
+                Tu lista está vacía.<br>¡Agrega tu primer producto! 👆
+            </div>
+        </div>
+        <div id="footerLista" class="hidden p-3 flex justify-between items-center border-t border-gray-100">
+            <span id="contadorItems" class="text-xs text-gray-400"></span>
+            <button onclick="limpiarLista()" class="text-xs text-red-400 hover:text-red-600 font-semibold transition">
+                🗑️ Limpiar lista
+            </button>
+        </div>
+    </div>
+
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-gray-50 text-gray-500 text-xs font-bold text-center py-2 border-b border-gray-100">
+            🕓 PRODUCTOS COMPRADOS ANTES
+        </div>
+        <div id="historialCompras" class="divide-y divide-gray-50">
+            <div id="historialVacio" class="p-6 text-center text-gray-300 text-sm">
+                Tu historial aparecerá aquí.
+            </div>
+        </div>
+    </div>
+
+    <p class="text-[10px] text-gray-300 mt-6">ComprAhorro © 2026 — Panamá 🇵🇦</p>
+
+<script>
+    let lista = JSON.parse(localStorage.getItem('ic_lista') || '[]');
+    let historial = JSON.parse(localStorage.getItem('ic_historial') || '[]');
+    let superFav = localStorage.getItem('ic_super') || '';
+
+    function seleccionarSuper(btn, nombre) {
+        document.querySelectorAll('.super-btn').forEach(b => b.classList.remove('bg-black','text-white'));
+        btn.classList.add('bg-black', 'text-white');
+        superFav = nombre;
+        localStorage.setItem('ic_super', nombre);
+        document.getElementById('superSeleccionado').textContent = '✅ Supermercado favorito: ' + nombre;
+    }
+
+    function restaurarSuper() {
+        if (!superFav) return;
+        document.querySelectorAll('.super-btn').forEach(b => {
+            if (b.textContent.trim() === superFav) b.classList.add('bg-black','text-white');
+        });
+        document.getElementById('superSeleccionado').textContent = '✅ Supermercado favorito: ' + superFav;
+    }
+
+    function agregarProducto() {
+        const input = document.getElementById('inputProducto');
+        const nombre = input.value.trim();
+        if (!nombre) {
+            input.classList.add('ring-2','ring-red-400');
+            setTimeout(() => input.classList.remove('ring-2','ring-red-400'), 1500);
+            return;
+        }
+        lista.push({ id: Date.now(), nombre, comprado: false });
+        localStorage.setItem('ic_lista', JSON.stringify(lista));
+        input.value = '';
+        renderLista();
+    }
+
+    function toggleComprado(id) {
+        const item = lista.find(i => i.id === id);
+        if (!item) return;
+        item.comprado = !item.comprado;
+        if (item.comprado) {
+            if (!historial.find(h => h.nombre.toLowerCase() === item.nombre.toLowerCase())) {
+                historial.unshift({ nombre: item.nombre, fecha: new Date().toLocaleDateString('es-PA') });
+                if (historial.length > 20) historial.pop();
+                localStorage.setItem('ic_historial', JSON.stringify(historial));
+            }
+        }
+        localStorage.setItem('ic_lista', JSON.stringify(lista));
+        renderLista();
+        renderHistorial();
+    }
+
+    function eliminarItem(id) {
+        lista = lista.filter(i => i.id !== id);
+        localStorage.setItem('ic_lista', JSON.stringify(lista));
+        renderLista();
+    }
+
+    function limpiarLista() {
+        if (!confirm('¿Limpiar toda la lista?')) return;
+        lista = [];
+        localStorage.setItem('ic_lista', JSON.stringify(lista));
+        renderLista();
+    }
+
+    function renderLista() {
+        const contenedor = document.getElementById('listaCompras');
+        const vacio = document.getElementById('listaVacia');
+        const footer = document.getElementById('footerLista');
+        const contador = document.getElementById('contadorItems');
+        if (lista.length === 0) {
+            contenedor.innerHTML = '';
+            contenedor.appendChild(vacio);
+            vacio.style.display = 'block';
+            footer.classList.add('hidden');
+            return;
+        }
+        vacio.style.display = 'none';
+        footer.classList.remove('hidden');
+        const pendientes = lista.filter(i => !i.comprado).length;
+        contador.textContent = pendientes + ' pendiente(s) de ' + lista.length + ' total';
+        contenedor.innerHTML = lista.map(item => `
+            <div class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition group ${item.comprado ? 'opacity-50' : ''}">
+                <input type="checkbox" ${item.comprado ? 'checked' : ''}
+                       onchange="toggleComprado(${item.id})"
+                       class="w-4 h-4 rounded accent-black cursor-pointer">
+                <span class="flex-grow text-sm text-gray-700 ${item.comprado ? 'line-through text-gray-400' : ''}">${item.nombre}</span>
+                <button onclick="buscarProducto('${item.nombre.replace(/'/g,"\\'")}', event)"
+                        class="text-[10px] text-blue-500 hover:text-blue-700 font-semibold opacity-0 group-hover:opacity-100 transition mr-2">
+                    🔍 Buscar precio
+                </button>
+                <button onclick="eliminarItem(${item.id})"
+                        class="text-gray-300 hover:text-red-400 transition opacity-0 group-hover:opacity-100 text-lg leading-none">
+                    ×
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function buscarProducto(nombre, e) {
+        e.preventDefault();
+        window.location.href = 'index.html?q=' + encodeURIComponent(nombre);
+    }
+
+    function renderHistorial() {
+        const contenedor = document.getElementById('historialCompras');
+        const vacio = document.getElementById('historialVacio');
+        if (historial.length === 0) {
+            contenedor.innerHTML = '';
+            contenedor.appendChild(vacio);
+            return;
+        }
+        vacio.style.display = 'none';
+        contenedor.innerHTML = historial.map(h => `
+            <div class="flex items-center justify-between px-4 py-2 hover:bg-gray-50 transition">
+                <span class="text-sm text-gray-600">${h.nombre}</span>
+                <div class="flex items-center gap-3">
+                    <span class="text-[10px] text-gray-300">${h.fecha}</span>
+                    <button onclick="reagregar('${h.nombre.replace(/'/g,"\\'")}', this)"
+                            class="text-[10px] text-green-500 hover:text-green-700 font-semibold transition">
+                        + Re-agregar
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function reagregar(nombre, btn) {
+        if (!lista.find(i => i.nombre.toLowerCase() === nombre.toLowerCase())) {
+            lista.push({ id: Date.now(), nombre, comprado: false });
+            localStorage.setItem('ic_lista', JSON.stringify(lista));
+            renderLista();
+            btn.textContent = '✅ Agregado';
+            setTimeout(() => btn.textContent = '+ Re-agregar', 1500);
+        } else {
+            btn.textContent = 'Ya está en lista';
+            setTimeout(() => btn.textContent = '+ Re-agregar', 1500);
+        }
+    }
+
+    document.getElementById('inputProducto').addEventListener('keydown', e => {
+        if (e.key === 'Enter') agregarProducto();
+    });
+
+    restaurarSuper();
+    renderLista();
+    renderHistorial();
+</script>
+</body>
+</html>
