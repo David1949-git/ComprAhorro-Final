@@ -1,5 +1,5 @@
 services:
-  # 1. El Cerebro (Backend) - REQUIERE plan: free
+  # 1. El Cerebro (Backend NestJS)
   - type: web
     name: comprahorro-backend
     runtime: node
@@ -12,13 +12,15 @@ services:
       - key: PORT
         value: 10000
 
-  # 2. La Cara (Frontend) - NO DEBE TENER la línea "plan"
-  - type: static_site
+  # 2. La Cara (Frontend React/Vite)
+  - type: web
     name: comprahorro-frontend
+    runtime: static
+    plan: free
     buildCommand: cd comprahorro-panama && npm install && npm run build
-    publishDir: comprahorro-panama/dist
+    staticPublishPath: comprahorro-panama/dist
 
 databases:
-  # 3. Base de Datos - REQUIERE plan: free
+  # 3. Base de Datos
   - name: comprahorro-db
     plan: free
