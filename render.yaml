@@ -1,8 +1,9 @@
 services:
-  # Backend API Service (NestJS)
+  # 1. El Cerebro (Backend) - REQUIERE plan: free
   - type: web
     name: comprahorro-backend
     runtime: node
+    plan: free
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm run start:prod
     envVars:
@@ -10,26 +11,14 @@ services:
         value: production
       - key: PORT
         value: 10000
-    healthCheckPath: /health
-    autoDeploy: true
 
-  # Frontend Service (React/Vite)
-  - type: web
+  # 2. La Cara (Frontend) - NO DEBE TENER la línea "plan"
+  - type: static
     name: comprahorro-frontend
-    runtime: static
     buildCommand: cd comprahorro-panama && npm install && npm run build
-    staticPublishPath: comprahorro-panama/dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://comprahorro-backend.onrender.com
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-    autoDeploy: true
+    publishDir: comprahorro-panama/dist
 
-# Database Service (PostgreSQL)
 databases:
+  # 3. Base de Datos - REQUIERE plan: free
   - name: comprahorro-db
-    databaseName: comprahorro
-    user: comprahorro_user
+    plan: free
