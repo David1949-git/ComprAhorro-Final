@@ -13,7 +13,7 @@ services:
         value: 10000
 
   # 2. La Cara (Frontend) - NO DEBE TENER la línea "plan"
-  - type: static
+  - type: static_site
     name: comprahorro-frontend
     buildCommand: cd comprahorro-panama && npm install && npm run build
     publishDir: comprahorro-panama/dist
