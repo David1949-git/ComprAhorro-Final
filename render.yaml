@@ -16,7 +16,6 @@ services:
   - type: web
     name: comprahorro-frontend
     runtime: static  # <--- Esto le dice a Render que es un sitio estático
-    plan: free     # <--- Esto fuerza el $0.00
     buildCommand: cd comprahorro-panama && npm install && npm run build
     staticPublishPath: comprahorro-panama/dist
 
