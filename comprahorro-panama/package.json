@@ -12,7 +12,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "vercel-build": "npm run build",
-    "vercel-dev": "npm run dev"
+    "vercel-dev": "npm run dev",
+    "install": "npm install",
+    "start": "npm run preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

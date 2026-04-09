@@ -15,8 +15,33 @@ const HeroSearch = () => {
     if (searchQuery.trim()) {
       setIsSearching(true);
       try {
+        // Get user location silently
+        let lat: string | undefined;
+        let lon: string | undefined;
+        
+        try {
+          const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              timeout: 5000,
+              enableHighAccuracy: true
+            });
+          });
+          lat = position.coords.latitude.toString();
+          lon = position.coords.longitude.toString();
+        } catch (error) {
+          // User denied location or geolocation failed, use Panama City as default
+          console.log('Geolocation failed, using Panama City default');
+          lat = '8.9824';
+          lon = '-79.5197';
+        }
+
         const apiUrl = import.meta.env.VITE_API_URL || 'https://compr-ahorro-final.vercel.app';
-        const response = await fetch(`${apiUrl}/ahorros/buscar?q=${encodeURIComponent(searchQuery.trim())}`);
+        const params = new URLSearchParams({
+          q: searchQuery.trim(),
+          lat: lat,
+          lon: lon
+        });
+        const response = await fetch(`${apiUrl}/ahorros/buscar?${params}`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

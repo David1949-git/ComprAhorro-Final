@@ -9,20 +9,26 @@ export class AhorrosService {
     const groqKey = process.env.GROQ_API_KEY;
     if (!serpKey) throw new InternalServerErrorException('SERPAPI_KEY no configurada');
 
+    // Ubicación para análisis y búsqueda geolocalizada
     const ubicacion = lat && lon
       ? `El usuario esta ubicado en coordenadas ${lat}, ${lon} en Panama. Prioriza negocios cercanos a esa ubicacion.`
       : 'El usuario esta en Panama.';
 
     let resultadosTiendas: any[] = [];
     
-    // ── Búsqueda 1: Tiendas panameñas ────────────────
+    // Búsqueda 1: Tiendas panameñas con geolocalización
     try {
+      const searchQuery = lat && lon 
+        ? `${q} near ${lat},${lon} site:pricesmart.com/es-pa OR site:rey.com.pa OR site:super99.com.pa OR site:machetazo.com OR site:ribasmith.com.pa OR site:arrocha.com`
+        : `${q} Panama site:pricesmart.com/es-pa OR site:rey.com.pa OR site:super99.com.pa OR site:machetazo.com OR site:ribasmith.com.pa OR site:arrocha.com`;
+      
       const response = await getJson({
         engine: 'google',
-        q: `${q} site:pricesmart.com/es-pa OR site:rey.com.pa OR site:super99.com.pa OR site:machetazo.com OR site:ribasmith.com.pa OR site:arrocha.com`,
+        q: searchQuery,
         api_key: serpKey,
         hl: 'es',
         gl: 'pa',
+        location: lat && lon ? `${lat},${lon}` : 'Panama',
         num: 6,
       });
       resultadosTiendas = (response.organic_results || []).slice(0, 3).map((item: any) => ({
