@@ -1,8 +1,8 @@
 services:
-  # 1. El Cerebro (Backend NestJS)
   - type: web
     name: comprahorro-backend
     runtime: node
+    plan: free
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm run start:prod
     envVars:
@@ -11,13 +11,11 @@ services:
       - key: PORT
         value: 10000
 
-  # 2. La Cara (Frontend React/Vite)
-  - type: web
+  - type: static_site
     name: comprahorro-frontend
-    runtime: static
     buildCommand: cd comprahorro-panama && npm install && npm run build
-    staticPublishPath: comprahorro-panama/dist
+    publishDir: comprahorro-panama/dist
 
 databases:
-  # 3. Base de Datos
   - name: comprahorro-db
+    plan: free
