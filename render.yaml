@@ -4,7 +4,7 @@ services:
     name: comprahorro-backend
     runtime: node
     plan: free
-    buildCommand: cd backend && npm install
+    buildCommand: cd backend && npm install && npm run build
     startCommand: cd backend && npm run start:prod
     envVars:
       - key: NODE_ENV
