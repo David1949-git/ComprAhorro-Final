@@ -5,7 +5,7 @@ services:
     runtime: node
     plan: free
     buildCommand: cd backend && npm install && ./node_modules/.bin/nest build
-    startCommand: cd backend && npm run start:prod
+    startCommand: node backend/dist/main
     envVars:
       - key: NODE_ENV
         value: production
