@@ -231,15 +231,15 @@ const HeroSearch = () => {
                 )}
               </div>
 
-              {/* AI Verdict */}
+              {/* Análisis de ComprAhorro */}
               {veredicto && (
                 <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-2xl p-6 shadow-elevated">
                   <div className="flex items-start gap-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-gradient-emerald rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">🤖</span>
+                      <span className="text-white font-bold text-sm">🔍</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-bold text-emerald-800 mb-2">Veredicto de la IA</h3>
+                      <h3 className="font-bold text-emerald-800 mb-2">Análisis de ComprAhorro</h3>
                       <p className="text-emerald-700 text-sm leading-relaxed">{veredicto}</p>
                     </div>
                   </div>

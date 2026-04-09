@@ -80,7 +80,7 @@ function generarVeredictoIA(items: any[], producto: string): string {
   const conPrecio = items.filter(i => i.precioFinal && i.precioFinal.includes('$'));
   
   if (conPrecio.length === 0) {
-    return `He buscado "${producto}" en las principales tiendas de Panamá. No detecto un precio de oferta hoy, pero te recomiendo revisar el Super 99 o Riba Smith por su inventario constante.`;
+    return `Nuestro análisis sugiere revisar el Super 99 o Riba Smith por su inventario constante para "${producto}" en las principales tiendas de Panamá. No detecto un precio de oferta hoy.`;
   }
 
   // Encontrar el más barato
@@ -90,7 +90,7 @@ function generarVeredictoIA(items: any[], producto: string): string {
     return precioActual < precioMin ? p : min;
   });
 
-  return `¡Veredicto ComprAhorro! Para "${producto}", tu mejor opción hoy es ${mejorOpcion.tienda} con un precio de ${mejorOpcion.precioFinal}. ¡Es el momento de ahorrar! 🚀🐷`;
+  return `Nuestro análisis sugiere que para "${producto}", tu mejor opción hoy es ${mejorOpcion.tienda} con un precio de ${mejorOpcion.precioFinal}. ¡Es el momento de ahorrar! 🚀🐷`;
 }
 
 function extraerTienda(url: string): string {
