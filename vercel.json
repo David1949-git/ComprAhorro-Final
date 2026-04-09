@@ -11,12 +11,19 @@
   ],
   "routes": [
     {
+      "src": "/comprahorro-panama/(.*)",
+      "dest": "/comprahorro-panama/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/comprahorro-panama/index.html"
     }
   ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { 
+      "source": "/(.*)", 
+      "destination": "/comprahorro-panama/index.html" 
+    }
   ],
   "env": {
     "VITE_API_URL": "https://compr-ahorro-final.vercel.app"
