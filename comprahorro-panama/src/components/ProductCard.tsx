@@ -15,15 +15,19 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
-    <div className="group bg-card rounded-2xl border border-border/50 shadow-soft overflow-hidden hover:shadow-card transition-all duration-300 cursor-pointer">
-      {/* Product image */}
-      <div className="relative">
+    <div className="group bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1">
+      {/* Product image with overlay */}
+      <div className="relative overflow-hidden">
         <img
           src={product.imagen || '/placeholder-product.png'}
           alt={product.producto}
           loading="lazy"
-          className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full aspect-square object-cover group-hover:scale-110 transition-transform duration-500"
         />
+        {/* Store badge overlay */}
+        <div className="absolute top-2 right-2 bg-white/95 backdrop-blur-sm px-2 py-1 rounded-lg shadow-md">
+          <span className="text-xs font-bold text-gray-700">{product.tienda}</span>
+        </div>
       </div>
 
       <div className="p-3 md:p-4 space-y-3">
@@ -43,12 +47,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {product.producto}
         </h3>
         
-        {/* Price section with custom styling */}
-        <div className="bg-[#e8f5ee] border-2 border-dashed border-[#2e7d52] rounded-lg p-2">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-foreground">
+        {/* Price section with professional styling */}
+        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-3">
+          <div className="flex items-center justify-between">
+            <span className="text-2xl font-bold text-emerald-700">
               {product.precioFinal}
             </span>
+            <div className="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full text-xs font-semibold">
+              Mejor Precio
+            </div>
           </div>
         </div>
         
@@ -59,7 +66,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             href={product.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 bg-gradient-emerald text-primary-foreground text-sm font-semibold py-3 rounded-xl hover:opacity-90 transition-all duration-300 shadow-elevated hover:shadow-card"
+            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-sm font-semibold py-3 rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
           >
             <ExternalLink size={16} strokeWidth={2} />
             Ver en el comercio
@@ -67,11 +74,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
           
           {/* Secondary actions */}
           <div className="flex gap-2">
-            <button className="flex-1 flex items-center justify-center gap-1 border border-border text-xs font-medium py-2 rounded-lg hover:bg-muted transition-colors">
+            <button className="flex-1 flex items-center justify-center gap-1 border border-gray-300 text-gray-700 text-xs font-medium py-2 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200">
               <MessageCircle size={14} />
               Consultar
             </button>
-            <button className="flex-1 flex items-center justify-center gap-1 border border-border text-xs font-medium py-2 rounded-lg hover:bg-muted transition-colors">
+            <button className="flex-1 flex items-center justify-center gap-1 border border-gray-300 text-gray-700 text-xs font-medium py-2 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200">
               <Phone size={14} />
               Guardar
             </button>

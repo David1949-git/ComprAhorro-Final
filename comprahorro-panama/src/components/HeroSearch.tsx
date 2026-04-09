@@ -15,7 +15,7 @@ const HeroSearch = () => {
     if (searchQuery.trim()) {
       setIsSearching(true);
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:10000';
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://compr-ahorro-final.vercel.app';
         const response = await fetch(`${apiUrl}/ahorros/buscar?q=${encodeURIComponent(searchQuery.trim())}`);
         
         if (!response.ok) {
