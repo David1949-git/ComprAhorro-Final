@@ -1,0 +1,7 @@
+{
+  "name": "compr-ahorro-final",
+  "framework": "vite",
+  "buildCommand": "npm install --prefix comprahorro-panama && npm run build --prefix comprahorro-panama",
+  "outputDirectory": "comprahorro-panama/dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
