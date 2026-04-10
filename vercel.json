@@ -11,18 +11,14 @@
   ],
   "routes": [
     {
-      "src": "/comprahorro-panama/(.*)",
-      "dest": "/comprahorro-panama/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/comprahorro-panama/index.html"
+      "dest": "/index.html"
     }
   ],
   "rewrites": [
     { 
       "source": "/(.*)", 
-      "destination": "/comprahorro-panama/index.html" 
+      "destination": "/index.html" 
     }
   ],
   "env": {
