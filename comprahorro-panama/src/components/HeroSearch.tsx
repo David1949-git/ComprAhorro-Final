@@ -30,12 +30,11 @@ const HeroSearch = () => {
           lon = position.coords.longitude.toString();
         } catch (error) {
           // User denied location or geolocation failed, use Panama City as default
-          console.log('Geolocation failed, using Panama City default');
-          lat = '8.9824';
+                    lat = '8.9824';
           lon = '-79.5197';
         }
 
-        const apiUrl = import.meta.env.VITE_API_URL || 'https://compr-ahorro-final.vercel.app';
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://comprahorro-backend.onrender.com';
         const params = new URLSearchParams({
           q: searchQuery.trim(),
           lat: lat,
@@ -48,8 +47,7 @@ const HeroSearch = () => {
         }
         
         const data = await response.json();
-        console.log("Search results:", data);
-        
+                
         // Handle new backend response format
         if (data.resultados && data.veredicto) {
           setSearchResults(Array.isArray(data.resultados) ? data.resultados : []);

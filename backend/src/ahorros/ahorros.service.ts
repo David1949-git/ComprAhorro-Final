@@ -64,13 +64,12 @@ export class AhorrosService {
         const parsed = JSON.parse(texto.replace(/```json|```/g, '').trim());
         resultadosGroq = Array.isArray(parsed) ? parsed : [];
       } catch (e) {
-        console.warn('Error Groq:', e);
-      }
+              }
     }
 
     // ── Combinar y Generar Veredicto ────────────────
     const todosLosResultados = [...resultadosTiendas, ...resultadosGroq].slice(0, 6);
-    const veredicto = generarVeredictoIA(todosLosResultados, q);
+    const veredicto = generarVeredictoComprAhorro(todosLosResultados, q);
 
     return {
       resultados: todosLosResultados,
@@ -81,12 +80,12 @@ export class AhorrosService {
 
 // --- Funciones de Apoyo ---
 
-function generarVeredictoIA(items: any[], producto: string): string {
+function generarVeredictoComprAhorro(items: any[], producto: string): string {
   // Filtrar los que tienen precio numérico
   const conPrecio = items.filter(i => i.precioFinal && i.precioFinal.includes('$'));
   
   if (conPrecio.length === 0) {
-    return `Nuestro análisis sugiere revisar el Super 99 o Riba Smith por su inventario constante para "${producto}" en las principales tiendas de Panamá. No detecto un precio de oferta hoy.`;
+    return `ComprAhorro recomienda revisar el Super 99 o Riba Smith por su inventario constante para "${producto}" en las principales tiendas de Panamá. No detectamos un precio de oferta hoy.`;
   }
 
   // Encontrar el más barato
@@ -96,7 +95,7 @@ function generarVeredictoIA(items: any[], producto: string): string {
     return precioActual < precioMin ? p : min;
   });
 
-  return `Nuestro análisis sugiere que para "${producto}", tu mejor opción hoy es ${mejorOpcion.tienda} con un precio de ${mejorOpcion.precioFinal}. ¡Es el momento de ahorrar! 🚀🐷`;
+  return `ComprAhorro encuentra que para "${producto}", tu mejor opción hoy es ${mejorOpcion.tienda} con un precio de ${mejorOpcion.precioFinal}. ¡ComprAhorro busca, tú ahorras! 🐷`;
 }
 
 function extraerTienda(url: string): string {
