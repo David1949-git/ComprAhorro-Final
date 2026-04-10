@@ -12,9 +12,9 @@ const Index = () => {
       
       {/* Mobile header */}
       <header className="md:hidden flex items-center justify-between px-4 pt-4 pb-2">
-        <div className="flex items-center gap-2">
-          <PiggyLogo size={32} />
-          <span className="font-bold text-lg text-foreground">ComprAhorro</span>
+        <div className="flex flex-col items-center">
+          <PiggyLogo size={28} />
+          <span className="font-bold text-xl text-foreground mt-2 leading-tight">ComprAhorro</span>
         </div>
       </header>
 
