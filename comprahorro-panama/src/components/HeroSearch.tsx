@@ -144,28 +144,14 @@ const HeroSearch = () => {
             </div>
           </form>
 
-          {/* Duo Action Buttons */}
+          {/* Search Button */}
           <div className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto mt-8">
             <button className="flex-1 flex items-center justify-center gap-3 bg-gradient-emerald text-primary-foreground px-6 py-5 rounded-2xl font-semibold text-base hover:opacity-90 transition-opacity shadow-elevated">
               <Search size={22} strokeWidth={2.5} />
               <span>Búsqueda General de Productos</span>
             </button>
-
-            <div className="flex-1 flex flex-col items-stretch">
-              <button className="flex items-center justify-center gap-3 bg-gradient-emerald text-primary-foreground px-6 py-5 rounded-2xl font-semibold text-base hover:opacity-90 transition-opacity shadow-elevated w-full">
-                <ShoppingCart size={22} strokeWidth={2.5} />
-                <span>Hacer Pedido de Supermercado</span>
-              </button>
-              <span className="flex items-center justify-center gap-1.5 mt-2 text-sm font-semibold text-primary">
-                <Truck size={16} strokeWidth={2.5} />
-                Tu súper a casa: ¡Muchos con envío gratis!
-              </span>
-              <span className="flex items-center justify-center gap-1.5 mt-1 text-sm text-muted-foreground">
-                Organiza tu lista de compras y ahorra tiempo.
-              </span>
-            </div>
-            </div>
-            </div>
+          </div>
+          </div>
           )}
 
           {/* Search results - show when search has been performed */}
