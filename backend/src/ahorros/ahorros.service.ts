@@ -64,7 +64,8 @@ export class AhorrosService {
         const parsed = JSON.parse(texto.replace(/```json|```/g, '').trim());
         resultadosGroq = Array.isArray(parsed) ? parsed : [];
       } catch (e) {
-              }
+        console.warn('Error Groq:', e);
+      }
     }
 
     // ── Combinar y Generar Veredicto ────────────────

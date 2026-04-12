@@ -19,3 +19,4 @@ const PiggyLogo = ({ size = 32 }: { size?: number }) => {
 };
 
 export default PiggyLogo;
+
